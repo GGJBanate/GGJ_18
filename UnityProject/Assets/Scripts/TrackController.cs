@@ -110,8 +110,8 @@ public class TrackController : MonoBehaviour
 
                 int brokenDir = Random.Range(0, 2);
                 generatedTrack.type = TrackType.TwoWayJunction;
-                GenerateTrackStep(depth + 1, pL, (Orientation) (o + 5 % 6), brokenDir == 0 ? true : broken, generatedTrack);
-                GenerateTrackStep(depth + 1, pR, (Orientation) (o + 1 % 6), brokenDir == 1 ? true : broken, generatedTrack);
+                GenerateTrackStep(depth + 1, pL, (Orientation) ((int)(o + 5) % 6), brokenDir == 0 ? true : broken, generatedTrack);
+                GenerateTrackStep(depth + 1, pR, (Orientation) ((int)(o + 1) % 6), brokenDir == 1 ? true : broken, generatedTrack);
                 break;
 
 
@@ -121,9 +121,9 @@ public class TrackController : MonoBehaviour
 
                 brokenDir = Random.Range(0, 3); 
                 generatedTrack.type = TrackType.ThreeWayJunction;
-                GenerateTrackStep(depth + 1, pL, (Orientation) (o + 5 % 6), brokenDir == 0 ? true : broken, generatedTrack);
-                GenerateTrackStep(depth + 1, pC, o,                         brokenDir == 1 ? true : broken, generatedTrack);
-                GenerateTrackStep(depth + 1, pR, (Orientation) (o + 1 % 6), brokenDir == 2 ? true : broken, generatedTrack);
+                GenerateTrackStep(depth + 1, pL, (Orientation) ((int)(o + 5) % 6), brokenDir == 0 ? true : broken, generatedTrack);
+                GenerateTrackStep(depth + 1, pC, o,                                brokenDir == 1 ? true : broken, generatedTrack);
+                GenerateTrackStep(depth + 1, pR, (Orientation) ((int)(o + 1) % 6), brokenDir == 2 ? true : broken, generatedTrack);
                 break;
         }
 
@@ -155,12 +155,12 @@ public enum TrackType
 
 public enum Orientation
 {
-    NN,
-    NE,
-    SE,
-    SS,
-    SW,
-    NW
+    NN = 0,
+    NE = 1,
+    SE = 2,
+    SS = 3,
+    SW = 4,
+    NW = 5
 }
 
 public class Pos {
@@ -188,7 +188,7 @@ public class Pos {
     public Pos Go (Orientation o, int dir) {
         Pos ret = new Pos(this.x, this.y, this.z);
 
-        switch((Orientation)o + 6 + dir % 6) {
+        switch((Orientation) ((int)(o + 6 + dir) % 6) ) {
             case Orientation.NN: 
                 ret.y-= 1;
                 break;
