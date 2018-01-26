@@ -11,20 +11,32 @@ public class TrackController : MonoBehaviour
 
     private TrackData track;
 
+    public Dictionary<Pos, TrackData> map = new Dictionary<Pos, TrackData>();
+
     void Start()
     {
-        track = GenerateTrack(0, new Pos(), Orientation.NN);
+        track = GenerateTrack(trackLength);
     }
 
-    private TrackData GenerateTrack(int depth, Pos pos, Orientation o, bool broken = false)
+    private TrackData GenerateTrack(int depth) {
+        TrackData generatedTrack = new TrackData(Orientation.NN);
+        generatedTrack.type = TrackType.Straight;
+        this.GenerateTrackStep(depth, new Pos(), Orientation.NN, false, generatedTrack);
+
+        return generatedTrack;
+    }
+
+    private void GenerateTrackStep(int depth, Pos pos, Orientation o, bool broken, TrackData parent)
     {
-        TrackData generatedTrack = new TrackData(pos, o);
+        TrackData generatedTrack = new TrackData(o);
+        map.Add(pos, generatedTrack);
+        parent.track.Add(generatedTrack);
 
 
         if (!broken && depth > trackLength)
         {
             generatedTrack.type = TrackType.Finish;
-            return generatedTrack;
+            return;
         }
 
 
@@ -32,34 +44,51 @@ public class TrackController : MonoBehaviour
         if (broken && Random.value < deadEndBreakageProbability)
         {
             generatedTrack.type = TrackType.DeadEnd;
-            return generatedTrack;
+            return;
         }
 
+
+        Pos pL = pos.Go(o, -1);
+        Pos pC = pos.Go(o,  0);
+        Pos pR = pos.Go(o, +1);
 
         switch (Random.Range(0, 4))
         {
             case 0:
             case 1:
+                if(map.ContainsKey(pL) ) {
+                    generatedTrack.type = TrackType.DeadEnd;
+                    break;
+                }
+
                 generatedTrack.type = TrackType.Straight;
-                generatedTrack.track.Add( GenerateTrack(depth + 1, pos.Go(o, 0), o, broken) );
+                GenerateTrackStep(depth + 1, pos.Go(o, 0), o, broken, generatedTrack);
                 break;
+
+
             case 2:
+                if(map.ContainsKey(pL) || map.ContainsKey(pR) )
+                    goto case 1;
+
                 int brokenDir = Random.Range(0, 2);
                 generatedTrack.type = TrackType.TwoWayJunction;
-                generatedTrack.track.Add( GenerateTrack(depth + 1, pos.Go(o, -1), (Orientation) (o + 5 % 6), brokenDir == 0 ? true : broken) );
-                generatedTrack.track.Add( GenerateTrack(depth + 1, pos.Go(o, +1), (Orientation) (o + 1 % 6), brokenDir == 1 ? true : broken) );
+                GenerateTrackStep(depth + 1, pL, (Orientation) (o + 5 % 6), brokenDir == 0 ? true : broken, generatedTrack);
+                GenerateTrackStep(depth + 1, pR, (Orientation) (o + 1 % 6), brokenDir == 1 ? true : broken, generatedTrack);
                 break;
+
+
             case 3:
-                brokenDir = Random.Range(0, 3);
+                if(map.ContainsKey(pL) || map.ContainsKey(pC) || map.ContainsKey(pR) )
+                    goto case 2;
+
+                brokenDir = Random.Range(0, 3); 
                 generatedTrack.type = TrackType.ThreeWayJunction;
-                generatedTrack.track.Add( GenerateTrack(depth + 1, pos.Go(o, -1), (Orientation) (o + 5 % 6), brokenDir == 0 ? true : broken) );
-                generatedTrack.track.Add( GenerateTrack(depth + 1, pos.Go(o,  0), o,                         brokenDir == 1 ? true : broken) );
-                generatedTrack.track.Add( GenerateTrack(depth + 1, pos.Go(o, +1), (Orientation) (o + 1 % 6), brokenDir == 2 ? true : broken) );
+                GenerateTrackStep(depth + 1, pL, (Orientation) (o + 5 % 6), brokenDir == 0 ? true : broken, generatedTrack);
+                GenerateTrackStep(depth + 1, pC, o,                         brokenDir == 1 ? true : broken, generatedTrack);
+                GenerateTrackStep(depth + 1, pR, (Orientation) (o + 1 % 6), brokenDir == 2 ? true : broken, generatedTrack);
                 break;
         }
 
-        //generatedTrack.track.Shuffle();
-        return generatedTrack;
     }
 }
 
@@ -69,32 +98,10 @@ public class TrackData
 
     public TrackType type;
 
-    public Pos pos;
-
     public Orientation o;
 
-    public TrackData(Pos pos, Orientation o) {
+    public TrackData(Orientation o) {
         this.o = o;
-        this.pos = pos;
-    }
-
-    public override string ToString()
-    {
-        var outStr = type.ToString();
-
-        if (track.Count > 0)
-        {
-            outStr += "(";
-
-            foreach (TrackData trackData in track)
-            {
-                outStr += trackData + ", ";
-            }
-
-            outStr = outStr.Substring(0, outStr.Length - 2) + ")";
-        }
-
-        return outStr;
     }
 }
 
