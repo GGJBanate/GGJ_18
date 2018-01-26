@@ -8,7 +8,11 @@ public class TrackPiece : MonoBehaviour
     public static float pieceHeight = 1;
 
     public Vector3 EndPos {
-        get { return transform.position + new Vector3(0, pieceHeight / 2, pieceLength / 2); }
+        get
+        {
+            var pos = new Vector3(0, pieceHeight / 2, pieceLength / 2);
+            return transform.TransformPoint(pos);
+        }
     }
 
     public List<GameObject> nextPiecePositions;
