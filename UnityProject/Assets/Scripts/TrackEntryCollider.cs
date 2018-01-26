@@ -4,16 +4,25 @@ using UnityEngine;
 
 public class TrackEntryCollider : MonoBehaviour
 {
-    public TrackPiece track;
+    [HideInInspector] public TrackPiece track;
+
+    [HideInInspector] public bool active;
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.tag != "Player") return;
+
+        CartPlayerController player = other.GetComponent<CartPlayerController>();
+
+        if (active)
         {
-            CartPlayerController player = other.GetComponent<CartPlayerController>();
+            Destroy(player.currentTrack.gameObject, 1);
             player.currentTrack = this.track;
             track.SpawnNextPieces();
         }
+        else
+        {
+            Destroy(gameObject, 3); // TODO What
+        }
     }
-
 }
