@@ -20,20 +20,19 @@ public class Messenger : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(Input.GetKeyDown("return")) {
-			Debug.Log("Return was pressed");
 			send();
 		}
 	}
 
 	private void send() {
 		if(input != null && view != null) {
-			Debug.Log("Sending stuff");
-			Debug.Log(input);
-			Text text = input.GetComponent<Text>();
+			string text = input.GetComponent<InputField>().text;
 			Debug.Log(text);
 			GameObject chatText = Instantiate(ChatTextPrefab, Vector3.zero, Quaternion.identity) as GameObject;
-			chatText.GetComponent<Text>().text = text.text;
+			chatText.GetComponent<Text>().text = text;
 			chatText.transform.SetParent(view.transform, false);
+			input.GetComponent<InputField>().text = "";
+			input.GetComponent<InputField>().Select();
 		}
 	}
 }
