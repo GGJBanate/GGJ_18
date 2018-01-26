@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114141011867358162}
   m_Layer: 5
   m_Name: Text
-  m_TagString: Untagged
+  m_TagString: Input
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 114761349311311316}
   m_Layer: 5
   m_Name: InputField
-  m_TagString: Input
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -921,8 +921,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114766102761427422}
   m_HandleRect: {fileID: 224653415440320208}
   m_Direction: 0
-  m_Value: 0.7257815
-  m_Size: 0
+  m_Value: 0.5
+  m_Size: 0.9999995
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1033,6 +1033,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9834856aed480d4e8b2b2b41e1a323b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  view: {fileID: 1851602337921874}
+  input: {fileID: 1122948595663736}
   ChatTextPrefab: {fileID: 1203704038364396, guid: cf905178619c3c84ea508afe8d9257d3,
     type: 2}
 --- !u!114 &114761349311311316
@@ -5064,6 +5066,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000045550587, y: -0.000019241525}
+  m_AnchoredPosition: {x: -0.000045550587, y: 0.0000030224326}
   m_SizeDelta: {x: 0.000045776367, y: 0}
   m_Pivot: {x: 0, y: 1}
