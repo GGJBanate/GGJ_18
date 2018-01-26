@@ -650,6 +650,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9834856aed480d4e8b2b2b41e1a323b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChatTextPrefab: {fileID: 1203704038364396, guid: cf905178619c3c84ea508afe8d9257d3,
+    type: 2}
 --- !u!114 &114498382557477074
 MonoBehaviour:
   m_ObjectHideFlags: 1

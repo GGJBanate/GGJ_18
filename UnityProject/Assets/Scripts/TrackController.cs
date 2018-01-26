@@ -1,26 +1,67 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 public class TrackController : MonoBehaviour
 {
+    private static TrackController instance;
+
     public int trackLength = 5;
 
     public float deadEndBreakageProbability = .8f;
+
+    public List<TrackPiece> trackPiecePrefabs;
 
     private TrackData track;
 
     public Dictionary<Pos, TrackData> map = new Dictionary<Pos, TrackData>();
 
+    public bool debug = false;
+
+    public static TrackController Instance
+    {
+        get
+        {
+            if (instance != null)
+                return instance;
+
+            Debug.LogError("No TrackController available in the Scene!");
+            throw new NullReferenceException();
+        }
+    }
+
+    public CartPlayerController playerPrefab;
+
     void Start()
     {
-        track = GenerateTrack(trackLength);
+        instance = this;
+
+        track = GenerateTrack(0); 
+
+        Debug.Log("track generated");
+        TrackPiece piece = BuildPiece(track, transform);
+        Debug.Log("first piece spawned");
+        piece.SpawnNextPieces();
+        Debug.Log("second piece spawned");
+    }
+
+    public TrackPiece BuildPiece(TrackData trackData, Transform baseTransform)
+    {
+        Debug.Log("trying to spawn " + trackData.type);
+        TrackPiece trackPiecePrefab = trackPiecePrefabs.First(t => t.type == trackData.type);
+        TrackPiece piece = Instantiate(trackPiecePrefab, baseTransform.position, baseTransform.rotation, transform);
+        piece.pieceData = trackData;
+
+        return piece;
     }
 
     private TrackData GenerateTrack(int depth) {
         TrackData generatedTrack = new TrackData(Orientation.NN);
-        generatedTrack.type = TrackType.Straight;
+        generatedTrack.type = TrackType.Start;
         this.GenerateTrackStep(depth, new Pos(), Orientation.NN, false, generatedTrack);
 
         return generatedTrack;
@@ -111,7 +152,8 @@ public enum TrackType
     TwoWayJunction,
     ThreeWayJunction,
     Finish,
-    DeadEnd
+    DeadEnd,
+    Start
 }
 
 public enum Orientation
@@ -149,7 +191,7 @@ public class Pos {
     public Pos Go (Orientation o, int dir) {
         Pos ret = new Pos(this.x, this.y, this.z);
 
-        switch((Orientation)o + dir % 6) {
+        switch((Orientation)o + 6 + dir % 6) {
             case Orientation.NN: 
                 ret.y-= 1;
                 break;
