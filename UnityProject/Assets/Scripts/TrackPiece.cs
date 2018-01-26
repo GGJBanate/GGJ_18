@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrackPiece : MonoBehaviour {
+public class TrackPiece : MonoBehaviour
+{
+
+    public List<GameObject> nextPiecePositions;
+
+    public TrackType type = TrackType.Straight;
 
 	// Use this for initialization
 	void Start () {
