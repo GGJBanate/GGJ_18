@@ -26,13 +26,13 @@ public class Messenger : MonoBehaviour {
 
 	private void send() {
 		if(input != null && view != null) {
-			string text = input.GetComponent<InputField>().text;
-			Debug.Log(text);
+			InputField field = input.GetComponent<InputField>();
 			GameObject chatText = Instantiate(ChatTextPrefab, Vector3.zero, Quaternion.identity) as GameObject;
-			chatText.GetComponent<Text>().text = text;
+			chatText.GetComponent<Text>().text = field.text;
 			chatText.transform.SetParent(view.transform, false);
-			input.GetComponent<InputField>().text = "";
-			input.GetComponent<InputField>().Select();
+			field.text = "";
+			field.Select();
+			field.ActivateInputField();
 		}
 	}
 }
