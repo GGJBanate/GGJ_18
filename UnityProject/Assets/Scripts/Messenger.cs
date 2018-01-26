@@ -6,16 +6,14 @@ using UnityEditor;
 
 public class Messenger : MonoBehaviour {
 
-	private GameObject view;
-	private GameObject input;
+	public GameObject view;
+	public GameObject input;
 	private float textOffset;
 
 	public GameObject ChatTextPrefab;
 
 	// Use this for initialization
 	void Start () {
-		view = GameObject.FindWithTag("ViewContent");
-		input = GameObject.FindWithTag("Input");
 		this.gameObject.SetActive(false);
 	}
 	
@@ -30,16 +28,12 @@ public class Messenger : MonoBehaviour {
 	private void send() {
 		if(input != null && view != null) {
 			Debug.Log("Sending stuff");
-			Text text = input.GetComponentInChildren<Text>();
+			Debug.Log(input);
+			Text text = input.GetComponent<Text>();
+			Debug.Log(text);
 			GameObject chatText = Instantiate(ChatTextPrefab, Vector3.zero, Quaternion.identity) as GameObject;
 			chatText.GetComponent<Text>().text = text.text;
 			chatText.transform.SetParent(view.transform, false);
-			chatText.transform.position = new Vector3(chatText.transform.position.x, chatText.transform.position.y+textOffset, chatText.transform.position.z);
-			float textHeight = chatText.GetComponent<RectTransform>().rect.height;
-			textOffset -= textHeight;
-			Rect rect = view.GetComponent<RectTransform>().rect;
-			rect.height += textHeight;
-			text.text = "";
 		}
 	}
 }
