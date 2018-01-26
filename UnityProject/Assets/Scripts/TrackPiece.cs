@@ -36,7 +36,12 @@ public class TrackPiece : MonoBehaviour
         for (int index = 0; index < pieceData.track.Count; index++)
         {
             TrackData data = pieceData.track[index];
-            TrackController.Instance.BuildPiece(data, nextPiecePositions[index].transform);
+            Debug.Log(data.o);
+            TrackPiece p = TrackController.Instance.BuildPiece(data, nextPiecePositions[index].transform);
+
+            if(TrackController.Instance.debug) {
+                p.SpawnNextPieces();
+            }
         }
 
         nextPiecesSpawned = true;
