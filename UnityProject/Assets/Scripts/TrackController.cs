@@ -36,7 +36,7 @@ public class TrackController : MonoBehaviour
     {
         instance = this;
 
-        track = new TrackData
+        track = new TrackData(new Pos(), Orientation.NN)
         {
             type = TrackType.Start,
             track = new List<TrackData> {GenerateTrack(0, new Pos(), Orientation.NN)}
@@ -55,6 +55,8 @@ public class TrackController : MonoBehaviour
         TrackPiece trackPiecePrefab = trackPiecePrefabs.First(t => t.type == trackData.type);
         TrackPiece piece = Instantiate(trackPiecePrefab, baseTransform.position, baseTransform.rotation, transform);
         piece.pieceData = trackData;
+
+        return piece;
     }
 
     private TrackData GenerateTrack(int depth, Pos pos, Orientation o, bool broken = false)
