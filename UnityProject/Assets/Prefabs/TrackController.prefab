@@ -60,5 +60,5 @@ MonoBehaviour:
   - {fileID: 114438284610989832, guid: f751826672f1ef24297d9b2a676be3ac, type: 2}
   - {fileID: 114458504344351358, guid: d051d151702323b41a5e665d503b8842, type: 2}
   - {fileID: 114672735417709086, guid: 92d1cf58bece29947ae7eae8a5815308, type: 2}
-  playerPrefab: {fileID: 114713428117755532, guid: a2cef8efa79df9240a044bfb988f4e91,
+  playerPrefab: {fileID: 114083196438023542, guid: 231ab5555aa243d47ad28b6f882fa422,
     type: 2}

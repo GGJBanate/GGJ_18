@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class TrackPiece : MonoBehaviour
 {
+    public static float pieceLength = 10;
+    public static float pieceHeight = 1;
+
+    public Vector3 EndPos {
+        get
+        {
+            var pos = new Vector3(0, pieceHeight / 2, pieceLength / 2);
+            return transform.TransformPoint(pos);
+        }
+    }
 
     public List<GameObject> nextPiecePositions;
 
@@ -16,11 +26,18 @@ public class TrackPiece : MonoBehaviour
 
     private bool nextPiecesSpawned;
 
+    public void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        DrawArrow.ForGizmo(EndPos, transform.forward);
+    }
+
     public void Start()
     {
-        if (this.type == TrackType.Start)
+        if (type == TrackType.Start)
         {
-            Instantiate(TrackController.Instance.playerPrefab, spawnPos.position, transform.rotation);
+            CartPlayerController player = Instantiate(TrackController.Instance.playerPrefab, spawnPos.position, transform.rotation);
+            player.currentTrack = this;
         }
     }
 
@@ -36,7 +53,12 @@ public class TrackPiece : MonoBehaviour
         for (int index = 0; index < pieceData.track.Count; index++)
         {
             TrackData data = pieceData.track[index];
-            TrackController.Instance.BuildPiece(data, nextPiecePositions[index].transform);
+            Debug.Log(data.o);
+            TrackPiece p = TrackController.Instance.BuildPiece(data, nextPiecePositions[index].transform);
+
+            if(TrackController.Instance.debug) {
+                p.SpawnNextPieces();
+            }
         }
 
         nextPiecesSpawned = true;
