@@ -10,7 +10,7 @@ public class TrackController : MonoBehaviour
 {
     private static TrackController instance;
 
-    public int trackLength = 5;
+    public int trackLength = 10;
 
     public float deadEndBreakageProbability = .8f;
 
@@ -41,17 +41,13 @@ public class TrackController : MonoBehaviour
             type = TrackType.Start,
             track = new List<TrackData> {GenerateTrack(0, new Pos(), Orientation.NN)}
         };
-
-        Debug.Log("track generated");
+        
         TrackPiece piece = BuildPiece(track, transform);
-        Debug.Log("first piece spawned");
         piece.SpawnNextPieces();
-        Debug.Log("second piece spawned");
     }
 
     public TrackPiece BuildPiece(TrackData trackData, Transform baseTransform)
     {
-        Debug.Log("trying to spawn " + trackData.type);
         TrackPiece trackPiecePrefab = trackPiecePrefabs.First(t => t.type == trackData.type);
         TrackPiece piece = Instantiate(trackPiecePrefab, baseTransform.position, baseTransform.rotation, transform);
         piece.pieceData = trackData;

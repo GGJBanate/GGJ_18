@@ -9,7 +9,11 @@ public class TrackEntryCollider : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
-        track.SpawnNextPieces();
+        {
+            CartPlayerController player = other.GetComponent<CartPlayerController>();
+            player.currentTrack = this.track;
+            track.SpawnNextPieces();
+        }
     }
 
 }

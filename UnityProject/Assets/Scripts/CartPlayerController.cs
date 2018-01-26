@@ -8,19 +8,27 @@ public class CartPlayerController : MonoBehaviour
 
     public ParticleSystem breaksEffect;
 
-    public double maximumBreakPower = 100;
+    public float maximumBreakPower = 100;
 
-    public double breakPowerBurnRate = 20;
+    public float breakPowerBurnRate = 20;
 
-    private double currentBreakPower;
+    public float topSpeed = 10;
+    public float minSpeed = 3;
+    public float acceleration = 3;
 
-    // Use this for initialization
+    private float currentSpeed = 0;
+
+    private float currentBreakPower;
+
+    private bool breaking = false;
+
+    [HideInInspector] public TrackPiece currentTrack;
+
     void Start()
     {
         currentBreakPower = maximumBreakPower;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetButtonDown("Fire1"))
@@ -29,16 +37,10 @@ public class CartPlayerController : MonoBehaviour
             {
                 breaksEffect.Play(true);
             }
-        }
-        else if (Input.GetButtonUp("Fire1"))
-        {
-            if (breaksEffect != null && breaksEffect.isPlaying)
-            {
-                breaksEffect.Stop(true);
-            }
+            breaking = true;
         }
 
-        if (Input.GetButton("Fire1"))
+        if (Input.GetButton("Fire1") && currentBreakPower > 0)
         {
             currentBreakPower -= Time.deltaTime * breakPowerBurnRate;
         }
@@ -46,6 +48,22 @@ public class CartPlayerController : MonoBehaviour
         {
             if (currentBreakPower < maximumBreakPower)
                 currentBreakPower += Time.deltaTime * breakPowerBurnRate;
+
+            if (breaksEffect != null && breaksEffect.isPlaying)
+            {
+                breaksEffect.Stop(true);
+            }
+
+            breaking = false;
         }
+
+        Move();
+    }
+
+    private void Move()
+    {
+        currentSpeed = Mathf.Lerp(currentSpeed, breaking ? topSpeed : minSpeed, acceleration);
+
+        transform.position = Vector3.MoveTowards(transform.position, currentTrack.EndPos, currentSpeed * Time.deltaTime);
     }
 }
