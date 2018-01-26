@@ -328,7 +328,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   view: {fileID: 1305980157555040}
   input: {fileID: 1047060546523086}
-  ChatTextPrefab: {fileID: 1203704038364396, guid: cf905178619c3c84ea508afe8d9257d3,
+  ChatTextPrefab: {fileID: 1693760149929498, guid: 43655a6feb15d884b9eb5b8f991a325f,
     type: 2}
 --- !u!114 &114129235517499890
 MonoBehaviour:
@@ -973,9 +973,9 @@ MonoBehaviour:
     m_Right: 10
     m_Top: 10
     m_Bottom: 10
-  m_ChildAlignment: 0
+  m_ChildAlignment: 2
   m_Spacing: 10
-  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 1
@@ -1314,7 +1314,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000035382145}
+  m_AnchoredPosition: {x: 0, y: 0.00002240999}
   m_SizeDelta: {x: 0.000045776367, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224848823115206974

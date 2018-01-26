@@ -28,7 +28,7 @@ public class Messenger : MonoBehaviour {
 		if(input != null && view != null) {
 			InputField field = input.GetComponent<InputField>();
 			GameObject chatText = Instantiate(ChatTextPrefab, Vector3.zero, Quaternion.identity) as GameObject;
-			chatText.GetComponent<Text>().text = field.text;
+			chatText.GetComponentInChildren<Text>().text = field.text;
 			chatText.transform.SetParent(view.transform, false);
 			field.text = "";
 			field.Select();
