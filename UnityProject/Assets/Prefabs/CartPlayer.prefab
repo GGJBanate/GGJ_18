@@ -74,9 +74,10 @@ GameObject:
   - component: {fileID: 65385505185354468}
   - component: {fileID: 23790617806711498}
   - component: {fileID: 114083196438023542}
+  - component: {fileID: 54473173749459306}
   m_Layer: 0
   m_Name: CartPlayer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -127,7 +128,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1902958526823232}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 45.90021, y: 0.2263, z: -2.155}
+  m_LocalPosition: {x: 73.300514, y: 13.256511, z: 1.1259949}
   m_LocalScale: {x: 0.6866461, y: 0.37116998, z: 0.8281285}
   m_Children:
   - {fileID: 4432344979179464}
@@ -213,6 +214,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1902958526823232}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &54473173749459306
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1902958526823232}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!65 &65385505185354468
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -223,8 +239,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.81, y: 2.1387465, z: 1.2788495}
+  m_Center: {x: 0, y: 0.56937313, z: 0.13942465}
 --- !u!81 &81980630810787822
 AudioListener:
   m_ObjectHideFlags: 1
@@ -283,6 +299,10 @@ MonoBehaviour:
   breaksEffect: {fileID: 198821006473922654}
   maximumBreakPower: 100
   breakPowerBurnRate: 20
+  topSpeed: 10
+  minSpeed: 3
+  acceleration: 3
+  currentTrack: {fileID: 0}
 --- !u!124 &124722970442433548
 Behaviour:
   m_ObjectHideFlags: 1
