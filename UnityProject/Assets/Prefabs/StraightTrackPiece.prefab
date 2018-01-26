@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 23019730765809080}
   - component: {fileID: 114691211754378980}
   m_Layer: 0
-  m_Name: StraightTrackPiecekPiece
+  m_Name: StraightTrackPiece
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -136,5 +136,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 997ed7e7107540b478f083230c257a14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NextPiecePositions:
-  - {fileID: 1398206372891756}
+  nextPiecePositions: []
+  type: 0
