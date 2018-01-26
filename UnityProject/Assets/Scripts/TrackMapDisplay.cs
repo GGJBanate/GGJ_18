@@ -6,7 +6,7 @@ public class TrackMapDisplay : MonoBehaviour {
 
 	public TrackData root;
 
-	public List<TrackMapPart> map;
+	// public List<TrackMapPart> map;
 
 	// Use this for initialization
 	void Start () {
@@ -18,13 +18,13 @@ public class TrackMapDisplay : MonoBehaviour {
 		
 	}
 }
-
+/* 
 public class TrackMapPart {
 
 	public int x;
 	public int y;
 
-	public Orientations o;
+	public Orientation o;
 
 	public TrackType type;
 
@@ -32,7 +32,7 @@ public class TrackMapPart {
 	public TrackMapPart c;
 	public TrackMapPart r;
 
-	TrackMapPart(int x, int y, Orientations orientation, TrackData part, List<TrackMapPart> map) {
+	TrackMapPart(int x, int y, Orientation orientation, TrackData part, List<TrackMapPart> map) {
 		this.x = x;
 		this.y = y;
 		this.o = orientation;
@@ -150,12 +150,4 @@ public class TrackMapPart {
 
 }
 
-public enum Orientations
-{
-    NN,
-    NE,
-    SE,
-    SS,
-    SW,
-    NW
-}
+*/
