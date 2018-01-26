@@ -1,29 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TrackController : MonoBehaviour
 {
-    public int trackLength = 10;
+    public int trackLength = 5;
 
-    public float deadEndBreakageProbability = .4f;
+    public float deadEndBreakageProbability = .8f;
 
     private TrackData track;
-    
+
     void Start()
     {
         track = GenerateTrack(0);
-
-        Debug.Log(track.ToString());
     }
 
     private TrackData GenerateTrack(int depth, bool broken = false)
     {
-        Debug.Log("Gener");
-
         TrackData generatedTrack = new TrackData();
 
-        if (depth > trackLength)
+        if (!broken && depth > trackLength)
         {
             generatedTrack.type = TrackType.Finish;
             generatedTrack.track = new List<TrackData>();
@@ -37,16 +34,17 @@ public class TrackController : MonoBehaviour
             }
             else
             {
-                switch (Random.Range(0, 3))
+                switch (Random.Range(0, 4))
                 {
                     case 0:
+                    case 1:
                         generatedTrack.type = TrackType.Straight;
                         generatedTrack.track = new List<TrackData>
                         {
                             GenerateTrack(depth + 1)
                         };
                         break;
-                    case 1:
+                    case 2:
                         generatedTrack.type = TrackType.TwoWayJunction;
                         generatedTrack.track = new List<TrackData>
                         {
@@ -54,7 +52,7 @@ public class TrackController : MonoBehaviour
                             GenerateTrack(depth + 1, true)
                         };
                         break;
-                    case 2:
+                    case 3:
                         generatedTrack.type = TrackType.ThreeWayJunction;
                         generatedTrack.track = new List<TrackData>
                         {
@@ -80,10 +78,18 @@ public class TrackData
 
     public override string ToString()
     {
-        var outStr = type + "\n";
-        foreach (TrackData trackData in track)
+        var outStr = type.ToString();
+
+        if (track.Count > 0)
         {
-            outStr += trackData.type + " - ";
+            outStr += "(";
+
+            foreach (TrackData trackData in track)
+            {
+                outStr += trackData + ", ";
+            }
+
+            outStr = outStr.Substring(0, outStr.Length - 2) + ")";
         }
 
         return outStr;
