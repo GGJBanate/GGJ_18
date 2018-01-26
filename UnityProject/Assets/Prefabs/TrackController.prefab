@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1142750116868126}
+  m_IsPrefabParent: 1
+--- !u!1 &1142750116868126
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4842415031817958}
+  - component: {fileID: 114241922984510534}
+  m_Layer: 0
+  m_Name: TrackController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4842415031817958
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1142750116868126}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 66.28091, y: 15.869908, z: -3.0194588}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114241922984510534
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1142750116868126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f8717611388f1248883570a8bafb18a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trackLength: 10
+  deadEndBreakageProbability: 0.7
+  trackPiecePrefabs:
+  - {fileID: 114639065831855550, guid: 3df3130be70eb834b951403b4414920f, type: 2}
+  - {fileID: 114005891994970166, guid: 742fa54c4219808499ecac2b13cf831a, type: 2}
+  - {fileID: 114523366479885746, guid: d43aa0486a3e4fb4cbd009dde8b9a3d0, type: 2}
+  - {fileID: 114438284610989832, guid: f751826672f1ef24297d9b2a676be3ac, type: 2}
+  - {fileID: 114458504344351358, guid: d051d151702323b41a5e665d503b8842, type: 2}
+  - {fileID: 114672735417709086, guid: 92d1cf58bece29947ae7eae8a5815308, type: 2}
+  playerPrefab: {fileID: 114713428117755532, guid: a2cef8efa79df9240a044bfb988f4e91,
+    type: 2}
