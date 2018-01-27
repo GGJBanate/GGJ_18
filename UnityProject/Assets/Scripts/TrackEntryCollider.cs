@@ -6,7 +6,28 @@ public class TrackEntryCollider : MonoBehaviour
 {
     [HideInInspector] public TrackPiece track;
 
-    [HideInInspector] public bool active;
+    [HideInInspector] private bool _active;
+
+    public GameObject activityIndicator;
+
+    public bool active
+    {
+        get
+        {
+            return _active;
+        }
+
+        set
+        {
+            if (activityIndicator != null) activityIndicator.SetActive(value && TrackController.Instance.debug);
+            _active = value;
+        }
+    }
+
+    void Start()
+    {
+        if (activityIndicator != null) activityIndicator.SetActive(TrackController.Instance.debug);
+    }
 
     void OnTriggerEnter(Collider other)
     {
