@@ -328,7 +328,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   view: {fileID: 1305980157555040}
   input: {fileID: 1047060546523086}
-  ChatTextPrefab: {fileID: 1693760149929498, guid: 43655a6feb15d884b9eb5b8f991a325f,
+  OwnTextPrefab: {fileID: 1693760149929498, guid: 43655a6feb15d884b9eb5b8f991a325f,
+    type: 2}
+  PartnerTextPrefab: {fileID: 1478316872221474, guid: 98a1c2caa0a1c7945b8fe49efa02439d,
     type: 2}
 --- !u!114 &114129235517499890
 MonoBehaviour:
@@ -863,7 +865,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 224048453989589132}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.99999976
+  m_Size: 0.99999964
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1085,10 +1087,10 @@ RectTransform:
   m_Father: {fileID: 224427554935254492}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 250, y: -150}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -128, y: 55.4}
+  m_SizeDelta: {x: 153, y: 34}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224048453989589132
 RectTransform:
@@ -1161,10 +1163,10 @@ RectTransform:
   m_Father: {fileID: 224499010972978594}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0059128, y: 39.8}
-  m_SizeDelta: {x: 213.54, y: 273}
+  m_AnchorMin: {x: 0.055182952, y: 0.21027225}
+  m_AnchorMax: {x: 0.9234436, y: 0.9218728}
+  m_AnchoredPosition: {x: 12.50592, y: -2.199997}
+  m_SizeDelta: {x: -809.46, y: -179}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224213562822415388
 RectTransform:
@@ -1179,10 +1181,10 @@ RectTransform:
   m_Father: {fileID: 224848823115206974}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.5}
-  m_SizeDelta: {x: -20, y: -13}
+  m_AnchorMin: {x: 0.04423335, y: 0.14557837}
+  m_AnchorMax: {x: 0.95115, y: 0.83380383}
+  m_AnchoredPosition: {x: 0.5, y: 0}
+  m_SizeDelta: {x: 1, y: -2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224397655364819146
 RectTransform:
@@ -1238,10 +1240,10 @@ RectTransform:
   m_Father: {fileID: 224427554935254492}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 251.37, y: 25.38}
-  m_SizeDelta: {x: 54.72, y: 129.61}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -136, y: 294}
+  m_SizeDelta: {x: 1159.9, y: 631.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224611260238311200
 RectTransform:
@@ -1275,10 +1277,10 @@ RectTransform:
   m_Father: {fileID: 224848823115206974}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.5}
-  m_SizeDelta: {x: -20, y: -13}
+  m_AnchorMin: {x: 0.04423335, y: 0.14557837}
+  m_AnchorMax: {x: 0.96500003, y: 0.83380383}
+  m_AnchoredPosition: {x: -1, y: -0.5}
+  m_SizeDelta: {x: -4, y: -3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224700980213405790
 RectTransform:
@@ -1314,7 +1316,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00002240999}
+  m_AnchoredPosition: {x: 0.000061035156, y: 0.000007443549}
   m_SizeDelta: {x: 0.000045776367, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224848823115206974
@@ -1332,10 +1334,10 @@ RectTransform:
   m_Father: {fileID: 224499010972978594}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -223}
-  m_SizeDelta: {x: 200, y: 30}
+  m_AnchorMin: {x: 0.043297395, y: 0.07270179}
+  m_AnchorMax: {x: 0.95900005, y: 0.15827222}
+  m_AnchoredPosition: {x: -1, y: 0}
+  m_SizeDelta: {x: -862, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224865847707650698
 RectTransform:

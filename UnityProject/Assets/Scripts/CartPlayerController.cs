@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class CartPlayerController : MonoBehaviour
 {
     public GameObject lamp;
+    public Camera playerCamera;
 
     public ParticleSystem breaksEffect;
 
@@ -27,6 +29,18 @@ public class CartPlayerController : MonoBehaviour
     void Start()
     {
         currentBreakPower = maximumBreakPower;
+
+        StartCoroutine(Shake());
+    }
+
+    IEnumerator Shake()
+    {
+        while (gameObject)
+        {
+            playerCamera.transform.DOShakePosition(.2f, .03f, 30);
+
+            yield return new WaitForSeconds(.2f);
+        }
     }
 
     void Update()
@@ -37,6 +51,7 @@ public class CartPlayerController : MonoBehaviour
             {
                 breaksEffect.Play(true);
             }
+
             breaking = true;
         }
 
