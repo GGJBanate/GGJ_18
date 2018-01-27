@@ -12,6 +12,9 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
 
     [SyncVar] public bool isCartPlayer;
 
+
+    [SyncVar] public bool hasStarted;
+
     private TrackController trackControllerInstance;
     private ControlRoomController controlRoomControllerInstance;
 
@@ -87,5 +90,17 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
     public void CmdSetGameStatus(GameStatus newStatus)
     {
         GameServer.Instance.gameStatus = newStatus;
+    }
+
+    public void StartGame()
+    {
+        CmdStartGame();
+    }
+
+    [Command]
+    public void CmdStartGame()
+    {
+        this.hasStarted = true;
+        GameServer.Instance.RefreshWaiting();
     }
 }
