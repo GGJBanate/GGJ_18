@@ -458,7 +458,7 @@ MonoBehaviour:
   maximumBreakPower: 100
   breakPowerBurnRate: 60
   breakPowerRegenRate: 10
-  topSpeed: 8
+  topSpeed: 5
   minSpeed: 0.5
   acceleration: 1
   deceleration: 2

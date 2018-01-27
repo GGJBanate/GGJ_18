@@ -45,6 +45,7 @@ public class TrackServer : NetworkBehaviour
         map.Add(new Pos(), new TrackPieceData(generatedTrack.o, generatedTrack.type));
         this.GenerateTrackStep(depth, new Pos(0,-1), Orientation.NN, false, generatedTrack);
         generatedTrack.track[0].data.switchActive = true;
+        generatedTrack.data.activeChild = 0;
 
         return generatedTrack;
     }
@@ -56,6 +57,7 @@ public class TrackServer : NetworkBehaviour
 
         TrackData generatedTrack = new TrackData(o);
         TrackPieceData tpd = new TrackPieceData(generatedTrack.o, generatedTrack.type);
+        tpd.id = map.Count;
         parent.track.Add(generatedTrack);
         map.Add(pos, tpd);
 
@@ -96,6 +98,7 @@ public class TrackServer : NetworkBehaviour
                 generatedTrack.type = TrackType.Straight;
                 GenerateTrackStep(depth + 1, pC, o, broken, generatedTrack);
                 generatedTrack.track[0].data.switchActive = true;
+                generatedTrack.data.activeChild = 0;
                 break;
 
 
@@ -111,7 +114,10 @@ public class TrackServer : NetworkBehaviour
                     generatedTrack);
                 GenerateTrackStep(depth + 1, pR, (Orientation) ((int) (o + 1) % 6), brokenDir != 1 ? true : broken,
                     generatedTrack);
-                generatedTrack.track[Random.Range(0, 2)].data.switchActive = true;
+
+                int activeChild = Random.Range(0, 2);
+                generatedTrack.track[activeChild].data.switchActive = true;
+                generatedTrack.data.activeChild = activeChild;
                 break;
 
 
@@ -126,7 +132,9 @@ public class TrackServer : NetworkBehaviour
                 GenerateTrackStep(depth + 1, pC, o, brokenDir != 1 ? true : broken, generatedTrack);
                 GenerateTrackStep(depth + 1, pR, (Orientation) ((int) (o + 1) % 6), brokenDir != 2 ? true : broken,
                     generatedTrack);
-                generatedTrack.track[Random.Range(0, 3)].data.switchActive = true;
+                activeChild = Random.Range(0, 3);
+                generatedTrack.track[activeChild].data.switchActive = true;
+                generatedTrack.data.activeChild = activeChild;
                 break;
         }
 
@@ -141,6 +149,7 @@ public struct TrackPieceData
     public Orientation o;
     public TrackType type;
     public bool switchActive;
+    public int activeChild;
     public int id;
 
     public TrackPieceData(Orientation o, TrackType type)
@@ -148,6 +157,7 @@ public struct TrackPieceData
         this.o = o;
         this.type = type;
         this.switchActive = false;
+        this.activeChild = 0;
         this.id = -1;
     }
 }
