@@ -44,6 +44,7 @@ public class TrackServer : NetworkBehaviour
         generatedTrack.type = TrackType.Start;
         map.Add(new Pos(), new TrackPieceData(generatedTrack.o, generatedTrack.type));
         this.GenerateTrackStep(depth, new Pos(0,-1), Orientation.NN, false, generatedTrack);
+        generatedTrack.track[0].data.switchActive = true;
 
         return generatedTrack;
     }
@@ -94,6 +95,7 @@ public class TrackServer : NetworkBehaviour
 
                 generatedTrack.type = TrackType.Straight;
                 GenerateTrackStep(depth + 1, pC, o, broken, generatedTrack);
+                generatedTrack.track[0].data.switchActive = true;
                 break;
 
 
@@ -109,6 +111,7 @@ public class TrackServer : NetworkBehaviour
                     generatedTrack);
                 GenerateTrackStep(depth + 1, pR, (Orientation) ((int) (o + 1) % 6), brokenDir != 1 ? true : broken,
                     generatedTrack);
+                generatedTrack.track[Random.Range(0, 2)].data.switchActive = true;
                 break;
 
 
@@ -123,6 +126,7 @@ public class TrackServer : NetworkBehaviour
                 GenerateTrackStep(depth + 1, pC, o, brokenDir != 1 ? true : broken, generatedTrack);
                 GenerateTrackStep(depth + 1, pR, (Orientation) ((int) (o + 1) % 6), brokenDir != 2 ? true : broken,
                     generatedTrack);
+                generatedTrack.track[Random.Range(0, 3)].data.switchActive = true;
                 break;
         }
 
@@ -136,11 +140,15 @@ public struct TrackPieceData
 {
     public Orientation o;
     public TrackType type;
+    public bool switchActive;
+    public int id;
 
     public TrackPieceData(Orientation o, TrackType type)
     {
         this.o = o;
         this.type = type;
+        this.switchActive = false;
+        this.id = -1;
     }
 }
 

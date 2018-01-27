@@ -73,18 +73,14 @@ public class TrackPiece : MonoBehaviour
             return;
         }
 
-        int activeChildRoute = Random.Range(0, pieceData.track.Count);
-
         for (int index = 0; index < pieceData.track.Count; index++)
         {
             TrackData data = pieceData.track[index];
             TrackPiece p = TrackController.Instance.BuildPiece(data, nextPiecePositions[index].transform);
-            p.entryCollider.active = activeChildRoute == index;
+            p.entryCollider.active = data.data.switchActive;
 
             if (TrackController.Instance.debug)
-            {
                 p.SpawnNextPieces();
-            }
         }
 
         nextPiecesSpawned = true;

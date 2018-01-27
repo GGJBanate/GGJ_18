@@ -8,8 +8,6 @@ using Random = UnityEngine.Random;
 
 public class TrackController : MonoBehaviour
 {
-    private static TrackController instance;
-
     public List<TrackPiece> trackPiecePrefabs;
 
     [HideInInspector]
@@ -17,16 +15,13 @@ public class TrackController : MonoBehaviour
 
     public bool debug = false;
 
-    public static TrackController Instance
-    {
-        get { return instance; }
-    }
+    public static TrackController Instance { get; private set; }
 
     public CartPlayerController playerPrefab;
 
     void Awake()
     {
-        instance = this;
+        Instance = this;
     }
 
     public void BuildTrack()
@@ -34,8 +29,6 @@ public class TrackController : MonoBehaviour
         TrackPiece piece = BuildPiece(track, transform);
         piece.SpawnNextPieces();
     }
-
-
 
     public TrackPiece BuildPiece(TrackData trackData, Transform baseTransform)
     {
@@ -45,6 +38,4 @@ public class TrackController : MonoBehaviour
 
         return piece;
     }
-
-    
 }
