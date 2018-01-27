@@ -8,54 +8,56 @@ public class GameServer : MonoBehaviour
 
     public bool isHostCartOverride = true;
 
-    private static GameServer instance;
-
-    public static GameServer Instance
-    {
-        get { return instance; }
-    }
+    public static GameServer Instance { get; private set; }
 
 
-    private LocalPlayerNetworkConnection ControlRoomPlayer;
-    private LocalPlayerNetworkConnection CartPlayer;
+    private LocalPlayerNetworkConnection controlRoomPlayer;
+    private LocalPlayerNetworkConnection cartPlayer;
 
     public void Awake()
     {
-        instance = this;
+        Instance = this;
     }
 
     public bool RegisterClient(LocalPlayerNetworkConnection client)
     {
         if (isHostCartOverride)
         {
-            if (CartPlayer == null)
+            if (cartPlayer == null)
             {
-                CartPlayer = client;
+                cartPlayer = client;
                 return true;
             }
 
-            if (ControlRoomPlayer == null)
+            if (controlRoomPlayer == null)
             {
-                ControlRoomPlayer = client;
+                controlRoomPlayer = client;
                 return false;
             }
         }
         else
         {
-            if (ControlRoomPlayer == null)
+            if (controlRoomPlayer == null)
             {
-                ControlRoomPlayer = client;
+                controlRoomPlayer = client;
                 return false;
             }
 
-            if (CartPlayer == null)
+            if (cartPlayer == null)
             {
-                CartPlayer = client;
+                cartPlayer = client;
                 return true;
             }
         }
 
 
         throw new InvalidOperationException();
+    }
+
+    public void SendChatMessage(string message, LocalPlayerNetworkConnection sender)
+    {
+        LocalPlayerNetworkConnection receiver = sender == cartPlayer ? controlRoomPlayer : cartPlayer;
+
+        receiver.RpcReceiveMessage(message);
     }
 }
