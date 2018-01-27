@@ -979,6 +979,7 @@ MonoBehaviour:
   breaksEffect: {fileID: 198821006473922654}
   breakPowerBar: {fileID: 114217105377598798}
   WaitingMessage: {fileID: 1586551204246750}
+  intro: {fileID: 1932894821466686, guid: 54821b8acdcd24b47ad33a1e849344da, type: 2}
   maximumBreakPower: 100
   breakPowerBurnRate: 60
   breakPowerRegenRate: 10

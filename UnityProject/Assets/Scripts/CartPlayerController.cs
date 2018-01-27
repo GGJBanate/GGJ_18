@@ -19,6 +19,7 @@ public class CartPlayerController : MonoBehaviour
     public Image breakPowerBar;
 
     public GameObject WaitingMessage;
+	public GameObject intro;
 
     public float maximumBreakPower = 100;
 
@@ -34,6 +35,8 @@ public class CartPlayerController : MonoBehaviour
 
     private float currentBreakPower;
 
+	private bool ready = false;
+
     private bool breaking = false;
 
     [HideInInspector] public TrackPiece currentTrack;
@@ -46,6 +49,7 @@ public class CartPlayerController : MonoBehaviour
     {
         localPlayer = FindObjectsOfType<LocalPlayerNetworkConnection>().First(l => l.isLocalPlayer);
         currentBreakPower = maximumBreakPower;
+		intro = Instantiate (intro);
 
     }
 
@@ -63,10 +67,14 @@ public class CartPlayerController : MonoBehaviour
     {
         if (GameServer.Instance.gameStatus == GameStatus.Waiting)
         {
+			if (Input.GetButtonDown ("Submit")) {
+				intro.SetActive (false);
+				ready = true;
+			}
             WaitingMessage.SetActive(true);
             return;
         }
-        else if (!started)
+        else if (!started && ready)
         {
             WaitingMessage.SetActive(false);
             StartCoroutine(Shake());
