@@ -130,7 +130,7 @@ public class CartPlayerController : MonoBehaviour
     private void Move()
     {
         GameServer gameServer = GameServer.Instance;
-        if (gameServer.gameStatus == GameStatus.Won || gameServer.gameStatus == GameStatus.GameOver)
+        if (gameServer.gameStatus != GameStatus.Ongoing)
         {
             //Nowhere to move now...
             return;
