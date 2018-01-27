@@ -51,14 +51,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f8717611388f1248883570a8bafb18a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trackLength: 10
-  deadEndBreakageProbability: 0.7
   trackPiecePrefabs:
-  - {fileID: 114639065831855550, guid: 3df3130be70eb834b951403b4414920f, type: 2}
+  - {fileID: 114984620175253950, guid: 3df3130be70eb834b951403b4414920f, type: 2}
   - {fileID: 114005891994970166, guid: 742fa54c4219808499ecac2b13cf831a, type: 2}
   - {fileID: 114523366479885746, guid: d43aa0486a3e4fb4cbd009dde8b9a3d0, type: 2}
   - {fileID: 114438284610989832, guid: f751826672f1ef24297d9b2a676be3ac, type: 2}
   - {fileID: 114458504344351358, guid: d051d151702323b41a5e665d503b8842, type: 2}
   - {fileID: 114672735417709086, guid: 92d1cf58bece29947ae7eae8a5815308, type: 2}
+  debug: 0
   playerPrefab: {fileID: 114083196438023542, guid: 231ab5555aa243d47ad28b6f882fa422,
     type: 2}
