@@ -8,8 +8,14 @@ public class TrackMapDisplay : MonoBehaviour {
     public GameObject canvas;
 
     public Sprite hexagon;
+    public Sprite hexagonStraight;
+    public Sprite hexagonTwoWayJunction;
+    public Sprite hexagonThreeWayJunction;
+    public Sprite hexagonFinish;
+    public Sprite hexagonDeadEnd;
+    public Sprite hexagonStart;
 
-    private Dictionary<Pos, TrackData> map;
+    private Dictionary<Pos, TrackPieceData> map;
 
     private int offsetx;
     private int offsety;
@@ -19,14 +25,14 @@ public class TrackMapDisplay : MonoBehaviour {
 
     }
 
-    public void init(Dictionary<Pos, TrackData> map) {
+    public void init(Dictionary<Pos, TrackPieceData> map) {
         this.map = map;
 
         int top = 0, right = 0, bottom = 0, left = 0;
         // map = new Dictionary<Pos, TrackData> (); //TrackController.Instance.map;
 
         Pos p;
-        foreach(KeyValuePair<Pos, TrackData> entry in map)
+        foreach(KeyValuePair<Pos, TrackPieceData> entry in map)
         {
             p = entry.Key;
             if(p.x < left) left = p.x;
@@ -35,19 +41,16 @@ public class TrackMapDisplay : MonoBehaviour {
             if(p.y > bottom) bottom = p.y;
         }
 
-        offsetx = - (right + left);
-        offsety = - (top + bottom);
+        offsetx = 0;//- (right + left);
+        offsety = 0;//- (top + bottom);
 
-        foreach(KeyValuePair<Pos, TrackData> entry in map)
+        foreach(KeyValuePair<Pos, TrackPieceData> entry in map)
         {
-            // AddTrackPieceToCanvas(entry.Key, entry.Value, canvas);
-
-            AddTextToCanvas("(" +entry.Key.x+ ","+entry.Key.y+ ") " + entry.Value.o, canvas, new Pos(entry.Key.x+offsetx, entry.Key.y+offsety), entry.Value.o);
-
+            AddTextToCanvas("TrackPiece_" +entry.Key.x+ "_"+entry.Key.y, new Pos(entry.Key.x+offsetx, entry.Key.y+offsety), entry.Value);
         }
 
 
-        Debug.Log("bounderies: " + top + " " + right + " " + bottom + left + ";" );
+        Debug.Log("bounderies: " + top + " " + right + " " + bottom + " " + left + "||" + offsetx + " " + offsety );
     }
     
     // Update is called once per frame
@@ -55,39 +58,52 @@ public class TrackMapDisplay : MonoBehaviour {
         
     }
 
-    public Text AddTextToCanvas(string text, GameObject canvasGameObject, Pos pos, Orientation o)
+    public Text AddTextToCanvas(string text, Pos pos, TrackPieceData trackPiece)
     {
-        Font ArialFont = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
-        /*
-        Text text = canvasGameObject.AddComponent<Text>();
-        text.text = textString;
-
-        text.font = ArialFont;
-        text.material = ArialFont.material;
-
-        return text;
-        */
         GameObject newText = new GameObject(text.Replace(" ", "-"), typeof(RectTransform));
-        /*
-        var newTextComp = newText.AddComponent<Text>();
-        newTextComp.text = text;        
-        newTextComp.font = ArialFont;
-        newTextComp.material = ArialFont.material;
-        newTextComp.color = Color.red;
-        newTextComp.alignment = TextAnchor.MiddleCenter;
-        newTextComp.fontSize = 10;
-        */
-        var newImageComp = newText.AddComponent<Image>();
-        newImageComp.sprite = hexagon;
 
-        newText.transform.SetParent(canvasGameObject.transform);
+        var newImageComp = newText.AddComponent<Image>();
+
+        switch(trackPiece.type) {
+            case TrackType.Straight: 
+                newImageComp.sprite = hexagonStraight;
+                break;
+
+            case TrackType.TwoWayJunction: 
+                newImageComp.sprite = hexagonTwoWayJunction;
+                break;
+
+            case TrackType.ThreeWayJunction: 
+                newImageComp.sprite = hexagonThreeWayJunction;
+                break;
+
+            case TrackType.Finish: 
+                newImageComp.sprite = hexagonFinish;
+                break;
+
+            case TrackType.DeadEnd: 
+                newImageComp.sprite = hexagonDeadEnd;
+                break;
+
+            case TrackType.Start: 
+                newImageComp.sprite = hexagonStart;
+                break;
+
+            default:
+                newImageComp.sprite = hexagon;
+                break;
+        }
+
+        // newImageComp.sprite = hexagon;
+
+        newText.transform.SetParent(canvas.transform);
         newText.transform.localScale = new Vector3(1, 0.866f, 1);
-        newText.transform.localPosition = new Vector3(pos.x*100, pos.y*100 + ( (pos.x+1) % 2 == 0 ? 50 : 0), 0);
-        newText.transform.Rotate(Vector3.forward, ((int)o) * 60);
+        newText.transform.localPosition = new Vector3(pos.x, -(pos.y - ( (pos.x+100) % 2 == 0 ? -0.5f : 0) ) , 0) * 100;
+        newText.transform.Rotate(Vector3.forward, ((int)trackPiece.o) * -60);
         return null;
     }
 
-    public Button AddTrackPieceToCanvas(Pos pos, TrackData track, GameObject canvasGameObject)
+    public Button AddTrackPieceToCanvas(Pos pos, TrackPieceData track, GameObject canvasGameObject)
     {
         /*
         GameObject text_Object = new GameObject("Text");
@@ -114,136 +130,3 @@ public class TrackMapDisplay : MonoBehaviour {
         return null;
     }
 }
-/* 
-public class TrackMapPart {
-
-    public int x;
-    public int y;
-
-    public Orientation o;
-
-    public TrackType type;
-
-    public TrackMapPart l;
-    public TrackMapPart c;
-    public TrackMapPart r;
-
-    TrackMapPart(int x, int y, Orientation orientation, TrackData part, List<TrackMapPart> map) {
-        this.x = x;
-        this.y = y;
-        this.o = orientation;
-
-        this.type = part.type;
-
-        switch(this.type) {
-            case TrackType.Straight:
-                CreateCenter(part.track[0], map);
-                break;
-
-            case TrackType.TwoWayJunction:
-                CreateLeft (part.track[0], map);
-                CreateRight(part.track[1], map);
-                break;
-
-            case TrackType.ThreeWayJunction:
-                CreateLeft  (part.track[0], map);
-                CreateCenter(part.track[1], map);
-                CreateRight (part.track[2], map);
-                break;
-
-            default:
-                break;
-
-        }
-
-        map.Add(this);
-    }
-
-    private void CreateCenter(TrackData child, List<TrackMapPart> map) {
-        int x = this.x;
-        int y = this.y;
-
-        switch(this.o) {
-            case Orientations.NN: 
-                y-= 1;
-                break;
-            case Orientations.NE:
-                x+= 1;
-                y-= 1;
-                break;
-            case Orientations.SE:
-                x+= 1;
-                break;
-            case Orientations.SS:
-                y+= 1;
-                break;
-            case Orientations.SW:
-                x-= 1;
-                break;
-            case Orientations.NW:
-                x-= 1;
-                y-= 1;
-                break;
-        }
-
-        c = new TrackMapPart(x, y, this.o, child, map);
-    }
-
-
-    private void CreateLeft(TrackData child, List<TrackMapPart> map) {
-        int x = this.x;
-        int y = this.y;
-
-        switch((Orientations)this.o + 1 % 6) {
-            case Orientations.NN: 
-                y-= 1;
-                break;
-            case Orientations.NE:
-                x+= 1;
-                y-= 1;
-                break;
-            case Orientations.SE:
-                x+= 1;
-                break;
-            case Orientations.SS:
-                y+= 1;
-                break;
-            case Orientations.SW:
-                x-= 1;
-                break;
-            case Orientations.NW:
-                x-= 1;
-                y-= 1;
-                break;
-        }
-
-        l = new TrackMapPart(x, y, this.o, child, map);
-    }
-
-
-    private void CreateRight(TrackData child, List<TrackMapPart> map) {
-        switch((Orientations)this.o + 5 % 6) {
-            case Orientation.NN: 
-                c = new TrackMapPart(this.x    , this.y - 1, child, map);
-                break;
-            case Orientations.NE:
-                c = new TrackMapPart(this.x + 1, this.y - 1, child, map);
-                break;
-            case Orientations.SE:
-                c = new TrackMapPart(this.x + 1, this.y    , child, map);
-                break;
-            case Orientations.SS:
-                c = new TrackMapPart(this.x    , this.y + 1, child, map);
-                break;
-            case Orientations.SW:
-                c = new TrackMapPart(this.x - 1, this.y    , child, map);
-                break;
-            case Orientations.NW:
-                c = new TrackMapPart(this.x - 1, this.y - 1, child, map);
-                break;
-        }
-    }
-
-}
-
-*/
