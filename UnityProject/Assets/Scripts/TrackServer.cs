@@ -35,15 +35,7 @@ public class TrackServer : NetworkBehaviour
     {
         track = GenerateTrack(0);
         serializedTrack = track.SerializeForNetwork();
-
-        Debug.Log(serializedTrack.Length);
-        Debug.Log(serializedTrack);
-
         serializedMap = JsonConvert.SerializeObject(map, Formatting.Indented);
-    
-        Debug.Log(map);
-        Debug.Log(serializedMap.Length);
-        Debug.Log(serializedMap);
     }
 
     private TrackData GenerateTrack(int depth)
