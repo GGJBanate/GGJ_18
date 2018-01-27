@@ -168,4 +168,17 @@ public class CartPlayerController : MonoBehaviour
             piece.entryCollider.active = index == switchDirection;
         }
     }
+
+    public void SetNextSwitch(int switchDirection)
+    {
+        if (currentTrack.nextPieces.Count == 1) return;
+        if (currentTrack.nextPieces.Count == 2 && switchDirection == 2)
+            switchDirection -= 1;
+
+        for (int index = 0; index < currentTrack.nextPieces.Count; index++)
+        {
+            TrackPiece piece = currentTrack.nextPieces[index];
+            piece.entryCollider.active = index == switchDirection;
+        }
+    }
 }
