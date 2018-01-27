@@ -14,7 +14,7 @@ public class TrackServer : NetworkBehaviour
 {
     public int trackLength = 10;
 
-    public float deadEndBreakageProbability = .8f;
+    public float deadEndBreakageLengthFactor = .7f;
 
     public Dictionary<Pos, TrackPieceData> map = new Dictionary<Pos, TrackPieceData>(new Pos.EqualityComparer());
 
@@ -41,9 +41,15 @@ public class TrackServer : NetworkBehaviour
     private TrackData GenerateTrack(int depth)
     {
         TrackData generatedTrack = new TrackData(Orientation.NN);
+        
         generatedTrack.type = TrackType.Start;
+        
         map.Add(new Pos(), new TrackPieceData(generatedTrack.o, generatedTrack.type));
+        map.Add(new Pos(0,-1), new TrackPieceData(Orientation.NN));
+
         this.GenerateTrackStep(depth, new Pos(0,-1), Orientation.NN, false, generatedTrack);
+        
+
         generatedTrack.track[0].data.switchActive = true;
         generatedTrack.data.activeChild = 0;
 
@@ -56,64 +62,64 @@ public class TrackServer : NetworkBehaviour
         // if(map.ContainsKey(pos)) return;
 
         TrackData generatedTrack = new TrackData(o);
-        TrackPieceData tpd = new TrackPieceData(generatedTrack.o, generatedTrack.type);
+        TrackPieceData tpd = map[pos];
         tpd.id = map.Count;
         parent.track.Add(generatedTrack);
-        map.Add(pos, tpd);
 
-        if (!broken && depth > trackLength)
+        if (depth >= (broken ? trackLength * deadEndBreakageLengthFactor : trackLength) )
         {
-            generatedTrack.type = TrackType.Finish;
+            generatedTrack.type = broken ? TrackType.DeadEnd : TrackType.Finish;
             tpd.type = generatedTrack.type;
             map[pos] = tpd;
             return;
         }
-
-
-        if (broken && Random.value < deadEndBreakageProbability)
-        {
-            generatedTrack.type = TrackType.DeadEnd;
-            tpd.type = generatedTrack.type;
-            map[pos] = tpd;
-            return;
-        }
-
 
         Pos pL = pos.Go(o, -1);
         Pos pC = pos.Go(o, 0);
         Pos pR = pos.Go(o, +1);
 
-        switch (Random.Range(0, 8))
+        Orientation oL = (Orientation) ((int) (o + 5) % 6);
+        Orientation oC = o;
+        Orientation oR = (Orientation) ((int) (o + 1) % 6);
+
+        switch (RandomTrackType())
         {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-                if (map.ContainsKey(pL))
+            case TrackType.Straight:
+                if (map.ContainsKey(pC))
                 {
                     generatedTrack.type = broken ? TrackType.DeadEnd : TrackType.Finish;
                     break;
                 }
 
                 generatedTrack.type = TrackType.Straight;
-                GenerateTrackStep(depth + 1, pC, o, broken, generatedTrack);
+                map.Add(pC, new TrackPieceData(oC));
+
+                GenerateTrackStep(depth + 1, pC, oC, broken, generatedTrack);
+
                 generatedTrack.track[0].data.switchActive = true;
                 generatedTrack.data.activeChild = 0;
                 break;
 
 
-            case 4:
-            case 5:
-            case 6:
+            case TrackType.TwoWayJunction:
                 if (map.ContainsKey(pL) || map.ContainsKey(pR))
-                    goto case 0;
+                    goto case TrackType.Straight;
 
-                int brokenDir = Random.Range(0, 2);
                 generatedTrack.type = TrackType.TwoWayJunction;
-                GenerateTrackStep(depth + 1, pL, (Orientation) ((int) (o + 5) % 6), brokenDir != 0 ? true : broken,
-                    generatedTrack);
-                GenerateTrackStep(depth + 1, pR, (Orientation) ((int) (o + 1) % 6), brokenDir != 1 ? true : broken,
-                    generatedTrack);
+                map.Add(pL, new TrackPieceData(oL));
+                map.Add(pR, new TrackPieceData(oR));
+
+                switch (Random.Range(0, 2)) {
+                    case 0:
+                        GenerateTrackStep(depth + 1, pL, oL, broken, generatedTrack);
+                        GenerateTrackStep(depth + 1, pR, oR, true, generatedTrack);
+                        break;
+
+                    case 1:
+                        GenerateTrackStep(depth + 1, pR, oR, broken, generatedTrack);
+                        GenerateTrackStep(depth + 1, pL, oL, true, generatedTrack);
+                        break;
+                }
 
                 int activeChild = Random.Range(0, 2);
                 generatedTrack.track[activeChild].data.switchActive = true;
@@ -121,17 +127,35 @@ public class TrackServer : NetworkBehaviour
                 break;
 
 
-            case 7:
+            case TrackType.ThreeWayJunction:
                 if (map.ContainsKey(pL) || map.ContainsKey(pC) || map.ContainsKey(pR))
-                    goto case 4;
+                    goto case TrackType.TwoWayJunction;
 
-                brokenDir = Random.Range(0, 3);
                 generatedTrack.type = TrackType.ThreeWayJunction;
-                GenerateTrackStep(depth + 1, pL, (Orientation) ((int) (o + 5) % 6), brokenDir != 0 ? true : broken,
-                    generatedTrack);
-                GenerateTrackStep(depth + 1, pC, o, brokenDir != 1 ? true : broken, generatedTrack);
-                GenerateTrackStep(depth + 1, pR, (Orientation) ((int) (o + 1) % 6), brokenDir != 2 ? true : broken,
-                    generatedTrack);
+                map.Add(pL, new TrackPieceData(oL));
+                map.Add(pC, new TrackPieceData(oC));
+                map.Add(pR, new TrackPieceData(oR));
+
+                switch (Random.Range(0, 3)) {
+                    case 0:
+                        GenerateTrackStep(depth + 1, pL, oL, broken, generatedTrack);
+                        GenerateTrackStep(depth + 1, pC, oC, true, generatedTrack);
+                        GenerateTrackStep(depth + 1, pR, oR, true, generatedTrack);
+                        break;
+
+                    case 1:
+                        GenerateTrackStep(depth + 1, pC, oC, broken, generatedTrack);
+                        GenerateTrackStep(depth + 1, pR, oR, true, generatedTrack);
+                        GenerateTrackStep(depth + 1, pL, oL, true, generatedTrack);
+                        break;
+
+                    case 2:
+                        GenerateTrackStep(depth + 1, pR, oR, broken, generatedTrack);
+                        GenerateTrackStep(depth + 1, pC, oC, true, generatedTrack);
+                        GenerateTrackStep(depth + 1, pL, oL, true, generatedTrack);
+                        break;
+                }
+
                 activeChild = Random.Range(0, 3);
                 generatedTrack.track[activeChild].data.switchActive = true;
                 generatedTrack.data.activeChild = activeChild;
@@ -141,7 +165,27 @@ public class TrackServer : NetworkBehaviour
         tpd.type = generatedTrack.type;
         map[pos] = tpd;
     }
+
+    private TrackType RandomTrackType(int type = -1) {
+        switch(type < 0 ? Random.Range(0, 8) : type) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                return TrackType.Straight;
+            case 4:
+            case 5:
+            case 6:
+                return TrackType.TwoWayJunction;
+            case 7:
+                return TrackType.ThreeWayJunction;
+
+            default:
+                return TrackType.Straight;
+        }
+    }
 }
+
 
 [Serializable]
 public struct TrackPieceData
@@ -152,10 +196,10 @@ public struct TrackPieceData
     public int activeChild;
     public int id;
 
-    public TrackPieceData(Orientation o, TrackType type)
+    public TrackPieceData(Orientation o, TrackType t = TrackType.Straight)
     {
         this.o = o;
-        this.type = type;
+        this.type = t;
         this.switchActive = false;
         this.activeChild = 0;
         this.id = -1;
