@@ -10,8 +10,7 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
     public TrackController trackControllerPrefab;
     public ControlRoomController controlRoomControllerPrefab;
 
-    [SyncVar]
-    public bool isCartPlayer;
+    [SyncVar] public bool isCartPlayer;
 
     private TrackController trackControllerInstance;
     private ControlRoomController controlRoomControllerInstance;
@@ -28,9 +27,12 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
         }
         else
         {
-            controlRoomControllerInstance = Instantiate(controlRoomControllerPrefab, transform.position, transform.rotation);
-            controlRoomControllerInstance.track = TrackData.DeserializeFromNetwork(TrackServer.Instance.serializedTrack);
-            controlRoomControllerInstance.map = JsonConvert.DeserializeObject<Dictionary<Pos, TrackPieceData>>(TrackServer.Instance.serializedMap);
+            controlRoomControllerInstance =
+                Instantiate(controlRoomControllerPrefab, transform.position, transform.rotation);
+            controlRoomControllerInstance.track =
+                TrackData.DeserializeFromNetwork(TrackServer.Instance.serializedTrack);
+            controlRoomControllerInstance.map =
+                JsonConvert.DeserializeObject<Dictionary<Pos, TrackPieceData>>(TrackServer.Instance.serializedMap);
             controlRoomControllerInstance.Init();
         }
     }
@@ -64,12 +66,15 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
     [ClientRpc]
     public void RpcReceiveMessage(string message)
     {
-		Messenger.Instance.receiveMsg(message);
+        if (isLocalPlayer)
+            Messenger.Instance.receiveMsg(message);
     }
 
-	public void SendChatMessage(string msg) {
-		if (isLocalPlayer) {
-			CmdSendMessage (msg);
-		}
-	}
+    public void SendChatMessage(string msg)
+    {
+        if (isLocalPlayer)
+        {
+            CmdSendMessage(msg);
+        }
+    }
 }

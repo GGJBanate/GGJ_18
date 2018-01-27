@@ -48,6 +48,7 @@ public class TrackController : MonoBehaviour
     {
         if (trackPiece.data.id == trackPieceId)
         {
+            trackPiece.data.activeChild = switchDirection;
             for (int index = 0; index < trackPiece.track.Count; index++)
             {
                 TrackData child = trackPiece.track[index];

@@ -48,7 +48,9 @@ public enum TrackType
     ThreeWayJunction = 2,
     Finish = 3,
     DeadEnd = 4,
-    Start = 5
+    Start = 5,
+    Broken = 6,
+    Danger = 7
 }
 
 public enum Orientation

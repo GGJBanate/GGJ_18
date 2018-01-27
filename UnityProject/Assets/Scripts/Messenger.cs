@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
@@ -47,13 +48,12 @@ public class Messenger : MonoBehaviour {
 	}
 
 	private void send() {
-		GameObject connectionObj = GameObject.Find ("LocalPlayerNetworkConnection(Clone)"); 
+	    LocalPlayerNetworkConnection connectionObj = FindObjectsOfType<LocalPlayerNetworkConnection>().First(l => l.isLocalPlayer); 
 		if(field != null && view != null) {
 			displayMsg (field.text, OwnTextPrefab);
 			if (connectionObj != null) {
-				LocalPlayerNetworkConnection connection = connectionObj.GetComponent<LocalPlayerNetworkConnection> ();
 				Debug.Log ("Sending Message via network");
-				connection.SendChatMessage (field.text);
+			    connectionObj.SendChatMessage (field.text);
 			} else {
 				Debug.Log ("Message was not sent");
 			}
