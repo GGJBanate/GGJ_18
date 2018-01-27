@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -35,8 +36,11 @@ public class CartPlayerController : MonoBehaviour
 
     [HideInInspector] public TrackPiece currentTrack;
 
+    private LocalPlayerNetworkConnection localPlayer;
+
     void Start()
     {
+        localPlayer = FindObjectsOfType<LocalPlayerNetworkConnection>().First(l => l.isLocalPlayer);
         currentBreakPower = maximumBreakPower;
 
         StartCoroutine(Shake());
@@ -126,10 +130,12 @@ public class CartPlayerController : MonoBehaviour
     private void Move()
     {
         GameServer gameServer = GameServer.Instance;
-        if(gameServer.gameStatus == GameStatus.Won || gameServer.gameStatus == GameStatus.GameOver){
+        if (gameServer.gameStatus == GameStatus.Won || gameServer.gameStatus == GameStatus.GameOver)
+        {
             //Nowhere to move now...
             return;
         }
+
         currentVelocity += (breaking ? -deceleration : acceleration) * Time.deltaTime;
         currentVelocity = Mathf.Clamp(currentVelocity, 0, 1);
         var realSpeed = (topSpeed - minSpeed) * currentVelocity + minSpeed;
@@ -141,31 +147,39 @@ public class CartPlayerController : MonoBehaviour
         updateGameStatus(realSpeed);
     }
 
-    private void changeStateAtEndTo(GameStatus newStatus){
-        if(currentTrack.EndPos == transform.position){
-            //SET GameSTatus to newStatus
+    private void changeStateAtEndTo(GameStatus newStatus)
+    {
+        if (currentTrack.EndPos == transform.position)
+        {
+            localPlayer.SetGameStatus(newStatus);
         }
     }
 
-    private void updateGameStatus(float realSpeed){
-        switch(currentTrack.type){
-            case TrackType.Broken : 
-                if(realSpeed < topSpeed/2){
-                    //SET GameStatus to GAME_OVER
+    private void updateGameStatus(float realSpeed)
+    {
+        switch (currentTrack.type)
+        {
+            case TrackType.Broken:
+                if (realSpeed < topSpeed / 2)
+                {
+                    localPlayer.SetGameStatus(GameStatus.GameOver);
                 }
+
                 break;
-            case TrackType.Finish : 
+            case TrackType.Finish:
                 changeStateAtEndTo(GameStatus.Won);
                 break;
-            case TrackType.DeadEnd :
-                changeStateAtEndTo(GamesStatus.GameOver);
+            case TrackType.DeadEnd:
+                changeStateAtEndTo(GameStatus.GameOver);
                 break;
-            case TrackType.Danger :
-                if(realSpeed > topSpeed/2){
-                    //SET GameStatus to GAME_OVER
+            case TrackType.Danger:
+                if (realSpeed > topSpeed / 2)
+                {
+                    localPlayer.SetGameStatus(GameStatus.GameOver);
                 }
+
                 break;
-            default : break;
+            default: break;
         }
     }
 

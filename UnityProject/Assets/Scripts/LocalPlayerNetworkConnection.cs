@@ -77,4 +77,15 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
             CmdSendMessage(msg);
         }
     }
+
+    public void SetGameStatus(GameStatus newStatus)
+    {
+        CmdSetGameStatus(newStatus);
+    }
+
+    [Command]
+    public void CmdSetGameStatus(GameStatus newStatus)
+    {
+        GameServer.Instance.gameStatus = newStatus;
+    }
 }
