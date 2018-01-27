@@ -32,13 +32,20 @@ public class TrackPiece : MonoBehaviour
     public void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        
-        Vector3 tmp = TrackController.Instance.transform.forward;
-        Vector3 dir = new Vector3(tmp.x, tmp.y, tmp.z);
 
-        Quaternion rot = Quaternion.AngleAxis( ((int)pieceData.o) * 60, Vector3.up);
+        if (TrackController.Instance != null)
+        {
+            Vector3 tmp = TrackController.Instance.transform.forward;
+            Vector3 dir = new Vector3(tmp.x, tmp.y, tmp.z);
 
-        DrawArrow.ForGizmo(EndPos, rot * dir);
+            Quaternion rot = Quaternion.AngleAxis(((int) pieceData.o) * 60, Vector3.up);
+
+            DrawArrow.ForGizmo(EndPos, rot * dir);
+        }
+        else
+        {
+            DrawArrow.ForGizmo(EndPos, transform.forward);
+        }
     }
 
     public void Awake()

@@ -24,14 +24,7 @@ public class TrackController : MonoBehaviour
 
     public static TrackController Instance
     {
-        get
-        {
-            if (instance != null)
-                return instance;
-
-            Debug.LogError("No TrackController available in the Scene!");
-            throw new NullReferenceException();
-        }
+        get { return instance; }
     }
 
     public CartPlayerController playerPrefab;
@@ -40,7 +33,7 @@ public class TrackController : MonoBehaviour
     {
         instance = this;
 
-        track = GenerateTrack(0); 
+        track = GenerateTrack(0);
 
         Debug.Log("track generated");
         TrackPiece piece = BuildPiece(track, transform);
@@ -56,7 +49,8 @@ public class TrackController : MonoBehaviour
         return piece;
     }
 
-    private TrackData GenerateTrack(int depth) {
+    private TrackData GenerateTrack(int depth)
+    {
         TrackData generatedTrack = new TrackData(Orientation.NN);
         generatedTrack.type = TrackType.Start;
         this.GenerateTrackStep(depth, new Pos(), Orientation.NN, false, generatedTrack);
@@ -78,7 +72,6 @@ public class TrackController : MonoBehaviour
         }
 
 
-
         if (broken && Random.value < deadEndBreakageProbability)
         {
             generatedTrack.type = TrackType.DeadEnd;
@@ -87,14 +80,15 @@ public class TrackController : MonoBehaviour
 
 
         Pos pL = pos.Go(o, -1);
-        Pos pC = pos.Go(o,  0);
+        Pos pC = pos.Go(o, 0);
         Pos pR = pos.Go(o, +1);
 
         switch (Random.Range(0, 4))
         {
             case 0:
             case 1:
-                if(map.ContainsKey(pL) ) {
+                if (map.ContainsKey(pL))
+                {
                     generatedTrack.type = TrackType.DeadEnd;
                     break;
                 }
@@ -105,28 +99,31 @@ public class TrackController : MonoBehaviour
 
 
             case 2:
-                if(map.ContainsKey(pL) || map.ContainsKey(pR) )
+                if (map.ContainsKey(pL) || map.ContainsKey(pR))
                     goto case 1;
 
                 int brokenDir = Random.Range(0, 2);
                 generatedTrack.type = TrackType.TwoWayJunction;
-                GenerateTrackStep(depth + 1, pL, (Orientation) ((int)(o + 5) % 6), brokenDir == 0 ? true : broken, generatedTrack);
-                GenerateTrackStep(depth + 1, pR, (Orientation) ((int)(o + 1) % 6), brokenDir == 1 ? true : broken, generatedTrack);
+                GenerateTrackStep(depth + 1, pL, (Orientation) ((int) (o + 5) % 6), brokenDir == 0 ? true : broken,
+                    generatedTrack);
+                GenerateTrackStep(depth + 1, pR, (Orientation) ((int) (o + 1) % 6), brokenDir == 1 ? true : broken,
+                    generatedTrack);
                 break;
 
 
             case 3:
-                if(map.ContainsKey(pL) || map.ContainsKey(pC) || map.ContainsKey(pR) )
+                if (map.ContainsKey(pL) || map.ContainsKey(pC) || map.ContainsKey(pR))
                     goto case 2;
 
-                brokenDir = Random.Range(0, 3); 
+                brokenDir = Random.Range(0, 3);
                 generatedTrack.type = TrackType.ThreeWayJunction;
-                GenerateTrackStep(depth + 1, pL, (Orientation) ((int)(o + 5) % 6), brokenDir == 0 ? true : broken, generatedTrack);
-                GenerateTrackStep(depth + 1, pC, o,                                brokenDir == 1 ? true : broken, generatedTrack);
-                GenerateTrackStep(depth + 1, pR, (Orientation) ((int)(o + 1) % 6), brokenDir == 2 ? true : broken, generatedTrack);
+                GenerateTrackStep(depth + 1, pL, (Orientation) ((int) (o + 5) % 6), brokenDir == 0 ? true : broken,
+                    generatedTrack);
+                GenerateTrackStep(depth + 1, pC, o, brokenDir == 1 ? true : broken, generatedTrack);
+                GenerateTrackStep(depth + 1, pR, (Orientation) ((int) (o + 1) % 6), brokenDir == 2 ? true : broken,
+                    generatedTrack);
                 break;
         }
-
     }
 }
 
@@ -138,7 +135,8 @@ public class TrackData
 
     public Orientation o;
 
-    public TrackData(Orientation o) {
+    public TrackData(Orientation o)
+    {
         this.o = o;
     }
 }
@@ -163,20 +161,25 @@ public enum Orientation
     NW = 5
 }
 
-public class Pos {
+public class Pos
+{
     public int x = 0;
     public int y = 0;
     public int z = 0;
 
-    public Pos() {}
+    public Pos()
+    {
+    }
 
-    public Pos(int x, int y, int z) {
+    public Pos(int x, int y, int z)
+    {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public Pos(int x, int y) {
+    public Pos(int x, int y)
+    {
         this.x = x;
         this.y = y;
     }
@@ -185,29 +188,31 @@ public class Pos {
         orientation of the tile
         direction in witch to go (-1 left, 0 center, +1 right)
     */
-    public Pos Go (Orientation o, int dir) {
+    public Pos Go(Orientation o, int dir)
+    {
         Pos ret = new Pos(this.x, this.y, this.z);
 
-        switch((Orientation) ((int)(o + 6 + dir) % 6) ) {
-            case Orientation.NN: 
-                ret.y-= 1;
+        switch ((Orientation) ((int) (o + 6 + dir) % 6))
+        {
+            case Orientation.NN:
+                ret.y -= 1;
                 break;
             case Orientation.NE:
-                ret.x+= 1;
-                ret.y-= 1;
+                ret.x += 1;
+                ret.y -= 1;
                 break;
             case Orientation.SE:
-                ret.x+= 1;
+                ret.x += 1;
                 break;
             case Orientation.SS:
-                ret.y+= 1;
+                ret.y += 1;
                 break;
             case Orientation.SW:
-                ret.x-= 1;
+                ret.x -= 1;
                 break;
             case Orientation.NW:
-                ret.x-= 1;
-                ret.y-= 1;
+                ret.x -= 1;
+                ret.y -= 1;
                 break;
         }
 

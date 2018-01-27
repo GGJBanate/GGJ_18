@@ -62,9 +62,10 @@ public class CartPlayerController : MonoBehaviour
 
     private void Move()
     {
-        currentSpeed = Mathf.Lerp(currentSpeed, breaking ? topSpeed : minSpeed, acceleration);
+        currentSpeed += (breaking ? -1 : 1) * acceleration * Time.deltaTime;
+        var realSpeed = Mathf.Lerp(minSpeed, topSpeed, currentSpeed);
 
-        transform.position = Vector3.MoveTowards(transform.position, currentTrack.EndPos, currentSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, currentTrack.EndPos, realSpeed * Time.deltaTime);
         transform.rotation = Quaternion.Lerp(transform.rotation, currentTrack.transform.rotation, 0.1f);
     }
 }
