@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CartPlayerController : MonoBehaviour
 {
@@ -10,15 +11,19 @@ public class CartPlayerController : MonoBehaviour
 
     public ParticleSystem breaksEffect;
 
+    public Image breakPowerBar;
+
     public float maximumBreakPower = 100;
 
-    public float breakPowerBurnRate = 20;
+    public float breakPowerBurnRate = 30;
+    public float breakPowerRegenRate = 10;
 
     public float topSpeed = 10;
     public float minSpeed = 3;
     public float acceleration = 3;
+    public float deceleration = 6;
 
-    private float currentSpeed = 0;
+    private float currentVelocity = 0;
 
     private float currentBreakPower;
 
@@ -45,7 +50,7 @@ public class CartPlayerController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Break"))
         {
             if (breaksEffect != null && !breaksEffect.isPlaying)
             {
@@ -55,14 +60,14 @@ public class CartPlayerController : MonoBehaviour
             breaking = true;
         }
 
-        if (Input.GetButton("Fire1") && currentBreakPower > 0)
+        if (Input.GetButton("Break") && currentBreakPower > 0)
         {
             currentBreakPower -= Time.deltaTime * breakPowerBurnRate;
         }
         else
         {
             if (currentBreakPower < maximumBreakPower)
-                currentBreakPower += Time.deltaTime * breakPowerBurnRate;
+                currentBreakPower += Time.deltaTime * breakPowerRegenRate;
 
             if (breaksEffect != null && breaksEffect.isPlaying)
             {
@@ -72,13 +77,21 @@ public class CartPlayerController : MonoBehaviour
             breaking = false;
         }
 
+
+        Vector3 newScale = breakPowerBar.rectTransform.localScale;
+        newScale.y = 1 - currentBreakPower / maximumBreakPower;
+        breakPowerBar.rectTransform.localScale = newScale;
+        Color barColor = Color.Lerp(Color.yellow, Color.red, newScale.y);
+        breakPowerBar.color = barColor;
+
         Move();
     }
 
     private void Move()
     {
-        currentSpeed += (breaking ? -1 : 1) * acceleration * Time.deltaTime;
-        var realSpeed = Mathf.Lerp(minSpeed, topSpeed, currentSpeed);
+        currentVelocity += (breaking ? -deceleration : acceleration) * Time.deltaTime;
+        currentVelocity = Mathf.Clamp(currentVelocity, 0, 1);
+        var realSpeed = (topSpeed - minSpeed) * currentVelocity + minSpeed;
 
         transform.position = Vector3.MoveTowards(transform.position, currentTrack.EndPos, realSpeed * Time.deltaTime);
         transform.rotation = Quaternion.Lerp(transform.rotation, currentTrack.transform.rotation, 0.1f);

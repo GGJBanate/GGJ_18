@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Input
   - ViewContent
+  - Connection
   layers:
   - Default
   - TransparentFX

@@ -5,21 +5,31 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using Newtonsoft.Json;
 using UnityEngine;
-using UnityEditor;
 
 public class TrackData
 {
     public List<TrackData> track = new List<TrackData>();
 
-    public TrackType type;
+    public TrackType type
+    {
+        get { return data.type; }
+        set { data.type = value; }
+    }
 
-    public Orientation o;
+    public Orientation o
+    {
+        get { return data.o; }
+        set { data.o = value; }
+    }
+
+    public TrackPieceData data;
 
     public TrackData(Orientation o)
     {
-        this.o = o;
+        data = new TrackPieceData();
+        data.o = o;
     }
-    
+
     public string SerializeForNetwork()
     {
         return JsonConvert.SerializeObject(this, Formatting.None);
@@ -38,7 +48,9 @@ public enum TrackType
     ThreeWayJunction = 2,
     Finish = 3,
     DeadEnd = 4,
-    Start = 5
+    Start = 5,
+    Broken = 6,
+    Danger = 7
 }
 
 public enum Orientation
