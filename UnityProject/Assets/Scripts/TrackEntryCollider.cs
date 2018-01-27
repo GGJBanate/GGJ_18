@@ -22,7 +22,7 @@ public class TrackEntryCollider : MonoBehaviour
         }
         else
         {
-            Destroy(track.gameObject, 3); // TODO What
+           //  Destroy(track.gameObject, 3); // TODO What
         }
     }
 }

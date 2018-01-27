@@ -52,7 +52,10 @@ public class TrackPiece : MonoBehaviour
     {
         entryCollider = GetComponentsInChildren<TrackEntryCollider>().First();
         entryCollider.track = this;
+    }
 
+    public void Start()
+    {
         if (type == TrackType.Start)
         {
             CartPlayerController player = Instantiate(TrackController.Instance.playerPrefab, spawnPos.position,
