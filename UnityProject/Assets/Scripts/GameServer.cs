@@ -8,9 +8,12 @@ public class GameServer : NetworkBehaviour
 
     public bool isHostCartOverride = true;
 
-    //TODO write SETTER for it LUCA pls!!!
     [SyncVar]
     public GameStatus gameStatus = GameStatus.Ongoing;
+
+    //TODO write SETTER for it LUCA pls!!!
+    [SyncVar]
+    public bool crossesAreOpen = false;
 
     public static GameServer Instance { get; private set; }
 

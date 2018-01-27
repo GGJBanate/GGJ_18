@@ -91,4 +91,8 @@ public class TrackPiece : MonoBehaviour
 
         nextPiecesSpawned = true;
     }
+
+    void Update(){
+        if(type != TrackType.Crossing)
+    }
 }

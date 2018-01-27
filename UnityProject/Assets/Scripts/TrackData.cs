@@ -50,7 +50,8 @@ public enum TrackType
     DeadEnd = 4,
     Start = 5,
     Broken = 6,
-    Danger = 7
+    Danger = 7,
+    Crossing = 8
 }
 
 public enum Orientation
