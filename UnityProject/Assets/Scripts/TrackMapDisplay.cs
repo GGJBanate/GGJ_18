@@ -15,20 +15,23 @@ public class TrackMapDisplay : MonoBehaviour {
     public Sprite hexagonDeadEnd;
     public Sprite hexagonStart;
 
-    private Dictionary<Pos, TrackPieceData> map;
-
     private Vector3 offset;
+
+    public static readonly Vector3 SCALE = new Vector3(1, 0.866f, 1);
 
     // Use this for initialization
     void Start () {
 
     }
 
+    // Update is called once per frame
+    void Update () {
+        
+    }
+
     public void init(Dictionary<Pos, TrackPieceData> map) {
-        this.map = map;
 
         int top = 0, right = 0, bottom = 0, left = 0;
-        // map = new Dictionary<Pos, TrackData> (); //TrackController.Instance.map;
 
         Pos p;
         foreach(KeyValuePair<Pos, TrackPieceData> entry in map)
@@ -50,19 +53,16 @@ public class TrackMapDisplay : MonoBehaviour {
 
         Debug.Log("bounderies: " + top + " " + right + " " + bottom + " " + left + "||" + offset.x + " " + offset.y );
     }
-    
-    // Update is called once per frame
-    void Update () {
-        
-    }
 
-    public Text AddTextToCanvas(string text, Pos pos, TrackPieceData trackPiece)
+    public void AddTextToCanvas(string text, Pos pos, TrackPieceData trackPiece)
     {
         GameObject newText = new GameObject(text.Replace(" ", "-"), typeof(RectTransform));
 
         var newImageComp = newText.AddComponent<Image>();
 
         switch(trackPiece.type) {
+            case TrackType.Broken:
+            case TrackType.Danger:
             case TrackType.Straight: 
                 newImageComp.sprite = hexagonStraight;
                 break;
@@ -92,43 +92,13 @@ public class TrackMapDisplay : MonoBehaviour {
                 break;
         }
 
-        // newImageComp.sprite = hexagon;
-
         newText.transform.SetParent(canvas.transform);
-        newText.transform.localScale = new Vector3(1, 0.866f, 1);
+        newText.transform.localScale = SCALE;
         newText.transform.localPosition = new Vector3(
             offset.x + pos.x - 0.14f*pos.x, 
             offset.y - (pos.y - ( (pos.x+100) % 2 == 0 ? -0.5f : 0)), 
             0
         ) * 100;
         newText.transform.Rotate(Vector3.forward, ((int)trackPiece.o) * -60);
-        return null;
-    }
-
-    public Button AddTrackPieceToCanvas(Pos pos, TrackPieceData track, GameObject canvasGameObject)
-    {
-        /*
-        GameObject text_Object = new GameObject("Text");
-        text_Object.transform.SetParent(canvasGameObject.transform);
-
-        float text_Object_rectSize_width = 10;
-        float text_Object_rectSize_height = 10;
-        float text_Object_trans_x = -75;
-        float text_Object_trans_y = 75;
-
-        RectTransform text_Object_trans = text_Object.AddComponent<RectTransform>();
-        text_Object_trans.sizeDelta.Set(text_Object_rectSize_width, text_Object_rectSize_height);
-        text_Object_trans.anchoredPosition3D = new Vector3(0, 0, 0);
-        text_Object_trans.anchoredPosition = new Vector2(text_Object_trans_x, text_Object_trans_y);
-        text_Object_trans.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-        text_Object_trans.localPosition.Set(0, 0, 0);
-
-        Button piece = text_Object.AddComponent<Button>();
-
-
-
-        return piece;
-        */
-        return null;
     }
 }

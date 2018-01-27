@@ -3,10 +3,13 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
 
-public class GameServer : MonoBehaviour
+public class GameServer : NetworkBehaviour
 {
 
     public bool isHostCartOverride = true;
+    
+    [SyncVar]
+    public GameStatus gameStatus = GameStatus.Waiting;
 
     public static GameServer Instance { get; private set; }
 
@@ -54,10 +57,22 @@ public class GameServer : MonoBehaviour
         throw new InvalidOperationException();
     }
 
+    public void RefreshWaiting()
+    {
+        gameStatus = controlRoomPlayer || cartPlayer ? GameStatus.Ongoing : GameStatus.Waiting;
+    }
+
     public void SendChatMessage(string message, LocalPlayerNetworkConnection sender)
     {
         LocalPlayerNetworkConnection receiver = sender == cartPlayer ? controlRoomPlayer : cartPlayer;
 		//sender.RpcReceiveMessage(message);
         receiver.RpcReceiveMessage(message);
     }
+}
+
+public enum GameStatus {
+    Ongoing = 0,
+    Won = 1,
+    GameOver = 2,
+    Waiting = 3
 }
