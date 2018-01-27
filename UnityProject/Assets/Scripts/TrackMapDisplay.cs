@@ -61,6 +61,8 @@ public class TrackMapDisplay : MonoBehaviour {
         var newImageComp = newText.AddComponent<Image>();
 
         switch(trackPiece.type) {
+            case TrackType.Broken:
+            case TrackType.Danger:
             case TrackType.Straight: 
                 newImageComp.sprite = hexagonStraight;
                 break;

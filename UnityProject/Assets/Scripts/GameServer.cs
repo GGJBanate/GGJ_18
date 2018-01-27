@@ -3,10 +3,14 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
 
-public class GameServer : MonoBehaviour
+public class GameServer : NetworkBehaviour
 {
 
     public bool isHostCartOverride = true;
+
+    //TODO write SETTER for it LUCA pls!!!
+    [SyncVar]
+    public GameStatus gameStatus = GameStatus.Ongoing;
 
     public static GameServer Instance { get; private set; }
 
@@ -60,4 +64,10 @@ public class GameServer : MonoBehaviour
 		//sender.RpcReceiveMessage(message);
         receiver.RpcReceiveMessage(message);
     }
+}
+
+public enum GameStatus {
+    Ongoing = 0,
+    Won = 1,
+    GameOver = 2
 }
