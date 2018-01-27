@@ -86,4 +86,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trackControllerPrefab: {fileID: 114241922984510534, guid: 74082b3593166db49bc98bf390980762,
     type: 2}
+  controlRoomControllerPrefab: {fileID: 114180989936709636, guid: 1308738ea6ec96747b85e7998445c736,
+    type: 2}
   isCartPlayer: 0

@@ -7,11 +7,13 @@ using UnityEngine.Networking;
 public class LocalPlayerNetworkConnection : NetworkBehaviour
 {
     public TrackController trackControllerPrefab;
+    public ControlRoomController controlRoomControllerPrefab;
 
     [SyncVar]
     public bool isCartPlayer;
 
     private TrackController trackControllerInstance;
+    private ControlRoomController controlRoomControllerInstance;
 
     public override void OnStartLocalPlayer()
     {
@@ -22,11 +24,12 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
             trackControllerInstance = Instantiate(trackControllerPrefab, transform.position, transform.rotation);
             trackControllerInstance.track = TrackData.DeserializeFromNetwork(TrackServer.Instance.serializedTrack);
             trackControllerInstance.BuildTrack();
-
         }
         else
         {
-            // TODO
+            controlRoomControllerInstance = Instantiate(controlRoomControllerPrefab, transform.position, transform.rotation);
+            controlRoomControllerInstance.track = TrackData.DeserializeFromNetwork(TrackServer.Instance.serializedTrack);
+            controlRoomControllerInstance.Init();
         }
     }
 

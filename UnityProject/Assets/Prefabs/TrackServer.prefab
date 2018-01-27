@@ -84,6 +84,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45ed2de566ddaed49ae534d30f5f968c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isHostCartOverride: 0
   trackLength: 10
   deadEndBreakageProbability: 0.8
   serializedTrack: 

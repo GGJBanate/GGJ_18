@@ -9,6 +9,8 @@ using Random = UnityEngine.Random;
 
 public class TrackServer : NetworkBehaviour
 {
+    public bool isHostCartOverride = true;
+
     public int trackLength = 10;
 
     public float deadEndBreakageProbability = .8f;
@@ -21,7 +23,7 @@ public class TrackServer : NetworkBehaviour
     {
         get { return instance; }
     }
-    
+
     [SyncVar] public string serializedTrack;
 
     private TrackData track;
@@ -42,17 +44,35 @@ public class TrackServer : NetworkBehaviour
 
     public bool RegisterClient(LocalPlayerNetworkConnection client)
     {
-        if (CartPlayer == null)
+        if (isHostCartOverride)
         {
-            CartPlayer = client;
-            return true;
+            if (CartPlayer == null)
+            {
+                CartPlayer = client;
+                return true;
+            }
+
+            if (ControlRoomPlayer == null)
+            {
+                ControlRoomPlayer = client;
+                return false;
+            }
+        }
+        else
+        {
+            if (ControlRoomPlayer == null)
+            {
+                ControlRoomPlayer = client;
+                return false;
+            }
+
+            if (CartPlayer == null)
+            {
+                CartPlayer = client;
+                return true;
+            }
         }
 
-        if (ControlRoomPlayer == null)
-        {
-            ControlRoomPlayer = client;
-            return false;
-        }
 
         throw new InvalidOperationException();
     }
@@ -133,5 +153,64 @@ public class TrackServer : NetworkBehaviour
                     generatedTrack);
                 break;
         }
+    }
+}
+
+public class Pos
+{
+    public int x = 0;
+    public int y = 0;
+    public int z = 0;
+
+    public Pos()
+    {
+    }
+
+    public Pos(int x, int y, int z)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
+    public Pos(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+
+    /**
+        orientation of the tile
+        direction in witch to go (-1 left, 0 center, +1 right)
+    */
+    public Pos Go(Orientation o, int dir)
+    {
+        Pos ret = new Pos(this.x, this.y, this.z);
+
+        switch ((Orientation) ((int) (o + 6 + dir) % 6))
+        {
+            case Orientation.NN:
+                ret.y -= 1;
+                break;
+            case Orientation.NE:
+                ret.x += 1;
+                ret.y -= 1;
+                break;
+            case Orientation.SE:
+                ret.x += 1;
+                break;
+            case Orientation.SS:
+                ret.y += 1;
+                break;
+            case Orientation.SW:
+                ret.x -= 1;
+                break;
+            case Orientation.NW:
+                ret.x -= 1;
+                ret.y -= 1;
+                break;
+        }
+
+        return ret;
     }
 }
