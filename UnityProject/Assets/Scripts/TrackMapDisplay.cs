@@ -11,11 +11,19 @@ public class TrackMapDisplay : MonoBehaviour {
 
     private Dictionary<Pos, TrackData> map;
 
-    private int top, right, bottom, left;
+    private int offsetx;
+    private int offsety;
 
     // Use this for initialization
     void Start () {
-        map = TrackController.Instance.map;
+
+    }
+
+    public void init(Dictionary<Pos, TrackData> map) {
+        this.map = map;
+
+        int top = 0, right = 0, bottom = 0, left = 0;
+        // map = new Dictionary<Pos, TrackData> (); //TrackController.Instance.map;
 
         Pos p;
         foreach(KeyValuePair<Pos, TrackData> entry in map)
@@ -27,17 +35,19 @@ public class TrackMapDisplay : MonoBehaviour {
             if(p.y > bottom) bottom = p.y;
         }
 
+        offsetx = - (right + left);
+        offsety = - (top + bottom);
+
         foreach(KeyValuePair<Pos, TrackData> entry in map)
         {
             // AddTrackPieceToCanvas(entry.Key, entry.Value, canvas);
 
-            AddTextToCanvas("(" +entry.Key.x+ ","+entry.Key.y+ ") " + entry.Value.o, canvas, entry.Key, entry.Value.o);
+            AddTextToCanvas("(" +entry.Key.x+ ","+entry.Key.y+ ") " + entry.Value.o, canvas, new Pos(entry.Key.x+offsetx, entry.Key.y+offsety), entry.Value.o);
 
         }
 
 
         Debug.Log("bounderies: " + top + " " + right + " " + bottom + left + ";" );
-
     }
     
     // Update is called once per frame
