@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class TrackPiece : MonoBehaviour
 {
-    public static float pieceLength = 10;
+    public static float pieceLength = 32;
     public static float pieceHeight = 1;
 
     public Vector3 EndPos
