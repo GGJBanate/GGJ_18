@@ -18,12 +18,7 @@ public class TrackServer : NetworkBehaviour
 
     public Dictionary<Pos, TrackPieceData> map = new Dictionary<Pos, TrackPieceData>(new Pos.EqualityComparer());
 
-    private static TrackServer instance;
-
-    public static TrackServer Instance
-    {
-        get { return instance; }
-    }
+    public static TrackServer Instance { get; private set; }
 
     [SyncVar] public string serializedTrack;
 
@@ -33,22 +28,14 @@ public class TrackServer : NetworkBehaviour
 
     public void Awake()
     {
-        instance = this;
+        Instance = this;
     }
 
     public override void OnStartServer()
     {
         track = GenerateTrack(0);
         serializedTrack = track.SerializeForNetwork();
-
-        Debug.Log(serializedTrack.Length);
-        Debug.Log(serializedTrack);
-
         serializedMap = JsonConvert.SerializeObject(map, Formatting.Indented);
-    
-        Debug.Log(map);
-        Debug.Log(serializedMap.Length);
-        Debug.Log(serializedMap);
     }
 
     private TrackData GenerateTrack(int depth)

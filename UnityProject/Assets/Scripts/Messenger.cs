@@ -3,17 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
+using UnityEngine.Events;
 
 public class Messenger : MonoBehaviour {
+
+	public static Messenger Instance { get; private set; }
 
 	public GameObject view;
 	public GameObject input;
 	private float textOffset;
 
-	public GameObject ChatTextPrefab;
+	private InputField field;
+
+	public GameObject OwnTextPrefab;
+	public GameObject PartnerTextPrefab;
+
+	void Awake() {
+		Instance = this;
+	}
 
 	// Use this for initialization
 	void Start () {
+		field = input.GetComponent<InputField>();
 		this.gameObject.SetActive(false);
 	}
 	
@@ -24,15 +35,36 @@ public class Messenger : MonoBehaviour {
 		}
 	}
 
+	public void focusInputField() {
+		field.Select();
+		field.ActivateInputField();
+	}
+
+	public void receiveMsg(string msg) {
+		this.gameObject.SetActive (true);
+		displayMsg (msg, PartnerTextPrefab);
+	}
+
 	private void send() {
-		if(input != null && view != null) {
-			InputField field = input.GetComponent<InputField>();
-			GameObject chatText = Instantiate(ChatTextPrefab, Vector3.zero, Quaternion.identity) as GameObject;
-			chatText.GetComponentInChildren<Text>().text = field.text;
-			chatText.transform.SetParent(view.transform, false);
+		GameObject connectionObj = GameObject.Find ("LocalPlayerNetworkConnection(Clone)"); 
+		if(field != null && view != null) {
+			displayMsg (field.text, OwnTextPrefab);
+			if (connectionObj != null) {
+				LocalPlayerNetworkConnection connection = connectionObj.GetComponent<LocalPlayerNetworkConnection> ();
+				Debug.Log ("Sending Message via network");
+				connection.sendMessage (field.text);
+			} else {
+				Debug.Log ("Message was not sent");
+			}
 			field.text = "";
-			field.Select();
-			field.ActivateInputField();
+			focusInputField ();
 		}
 	}
+
+	private void displayMsg(string msg, GameObject prefab) {
+		GameObject chatText = Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
+		chatText.GetComponentInChildren<Text>().text = msg;
+		chatText.transform.SetParent(view.transform, false);
+	}
+
 }

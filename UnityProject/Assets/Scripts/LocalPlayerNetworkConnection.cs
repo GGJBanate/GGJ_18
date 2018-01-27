@@ -48,4 +48,22 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
             GetComponent<NetworkIdentity>().connectionToClient.Disconnect();
         }
     }
+
+    [Command]
+    private void CmdSendMessage(string message)
+    {
+        GameServer.Instance.SendChatMessage(message, this);
+    }
+
+    [ClientRpc]
+    public void RpcReceiveMessage(string message)
+    {
+		Messenger.Instance.receiveMsg(message);
+    }
+
+	public void sendMessage(string msg) {
+		if (isLocalPlayer) {
+			CmdSendMessage (msg);
+		}
+	}
 }

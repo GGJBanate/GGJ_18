@@ -22,9 +22,7 @@ public class TrackData
     
     public string SerializeForNetwork()
     {
-        string serial = JsonConvert.SerializeObject(this, Formatting.None);
-        Debug.Log(serial);
-        return serial;
+        return JsonConvert.SerializeObject(this, Formatting.None);
     }
 
     public static TrackData DeserializeFromNetwork(string input)
