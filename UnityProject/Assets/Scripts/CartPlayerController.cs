@@ -11,7 +11,7 @@ public class CartPlayerController : MonoBehaviour
 
     public ParticleSystem breaksEffect;
 
-    public Image BreakPowerBar;
+    public Image breakPowerBar;
 
     public float maximumBreakPower = 100;
 
@@ -77,9 +77,12 @@ public class CartPlayerController : MonoBehaviour
             breaking = false;
         }
 
-        Vector3 newScale = BreakPowerBar.rectTransform.localScale;
-        newScale.y = currentBreakPower / maximumBreakPower;
-        BreakPowerBar.rectTransform.localScale = newScale;
+
+        Vector3 newScale = breakPowerBar.rectTransform.localScale;
+        newScale.y = 1 - currentBreakPower / maximumBreakPower;
+        breakPowerBar.rectTransform.localScale = newScale;
+        Color barColor = Color.Lerp(Color.yellow, Color.red, newScale.y);
+        breakPowerBar.color = barColor;
 
         Move();
     }
