@@ -11,6 +11,6 @@ public class ControlRoomController : MonoBehaviour
     {
     	TrackMapDisplay mapScreen = GameObject.Find("MapScreen").GetComponent<TrackMapDisplay>();
 
-    	mapScreen.init(new Dictionary<Pos, TrackData> ());
+    	mapScreen.init(map);
     }
 }
