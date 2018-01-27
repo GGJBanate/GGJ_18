@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 using Object = UnityEngine.Object;
@@ -9,13 +12,11 @@ using Random = UnityEngine.Random;
 
 public class TrackServer : NetworkBehaviour
 {
-    public bool isHostCartOverride = true;
-
     public int trackLength = 10;
 
     public float deadEndBreakageProbability = .8f;
 
-    public Dictionary<Pos, TrackData> map = new Dictionary<Pos, TrackData>();
+    public Dictionary<Pos, TrackPieceData> map = new Dictionary<Pos, TrackPieceData>();
 
     private static TrackServer instance;
 
@@ -26,10 +27,9 @@ public class TrackServer : NetworkBehaviour
 
     [SyncVar] public string serializedTrack;
 
-    private TrackData track;
+    [SyncVar] public string serializedMap;
 
-    private LocalPlayerNetworkConnection ControlRoomPlayer;
-    private LocalPlayerNetworkConnection CartPlayer;
+    private TrackData track;
 
     public void Awake()
     {
@@ -40,41 +40,15 @@ public class TrackServer : NetworkBehaviour
     {
         track = GenerateTrack(0);
         serializedTrack = track.SerializeForNetwork();
-    }
 
-    public bool RegisterClient(LocalPlayerNetworkConnection client)
-    {
-        if (isHostCartOverride)
-        {
-            if (CartPlayer == null)
-            {
-                CartPlayer = client;
-                return true;
-            }
+        Debug.Log(serializedTrack.Length);
+        Debug.Log(serializedTrack);
 
-            if (ControlRoomPlayer == null)
-            {
-                ControlRoomPlayer = client;
-                return false;
-            }
-        }
-        else
-        {
-            if (ControlRoomPlayer == null)
-            {
-                ControlRoomPlayer = client;
-                return false;
-            }
-
-            if (CartPlayer == null)
-            {
-                CartPlayer = client;
-                return true;
-            }
-        }
-
-
-        throw new InvalidOperationException();
+        serializedMap = JsonConvert.SerializeObject(map, Formatting.Indented);
+    
+        Debug.Log(map);
+        Debug.Log(serializedMap.Length);
+        Debug.Log(serializedMap);
     }
 
     private TrackData GenerateTrack(int depth)
@@ -90,13 +64,13 @@ public class TrackServer : NetworkBehaviour
     private void GenerateTrackStep(int depth, Pos pos, Orientation o, bool broken, TrackData parent)
     {
         TrackData generatedTrack = new TrackData(o);
-        map.Add(pos, generatedTrack);
         parent.track.Add(generatedTrack);
 
 
         if (!broken && depth > trackLength)
         {
             generatedTrack.type = TrackType.Finish;
+            map.Add(pos, new TrackPieceData(generatedTrack.o, generatedTrack.type));
             return;
         }
 
@@ -104,6 +78,7 @@ public class TrackServer : NetworkBehaviour
         if (broken && Random.value < deadEndBreakageProbability)
         {
             generatedTrack.type = TrackType.DeadEnd;
+            map.Add(pos, new TrackPieceData(generatedTrack.o, generatedTrack.type));
             return;
         }
 
@@ -153,9 +128,61 @@ public class TrackServer : NetworkBehaviour
                     generatedTrack);
                 break;
         }
+
+        map.Add(pos, new TrackPieceData(generatedTrack.o, generatedTrack.type));
     }
 }
 
+[Serializable]
+public struct TrackPieceData
+{
+    public Orientation o;
+    public TrackType type;
+
+    public TrackPieceData(Orientation o, TrackType type)
+    {
+        this.o = o;
+        this.type = type;
+    }
+}
+
+public class PosConverter : TypeConverter
+{
+    public override bool CanConvertFrom(ITypeDescriptorContext context,
+        Type sourceType)
+    {
+
+        if (sourceType == typeof(string))
+        {
+            return true;
+        }
+        return base.CanConvertFrom(context, sourceType);
+    }
+    // Overrides the ConvertFrom method of TypeConverter.
+    public override object ConvertFrom(ITypeDescriptorContext context,
+        CultureInfo culture, object value)
+    {
+        if (value is string)
+        {
+            string[] v = ((string)value).Split(',');
+            return new Pos(int.Parse(v[0]), int.Parse(v[1]), int.Parse(v[2]));
+        }
+        return base.ConvertFrom(context, culture, value);
+    }
+    // Overrides the ConvertTo method of TypeConverter.
+    public override object ConvertTo(ITypeDescriptorContext context,
+        CultureInfo culture, object value, Type destinationType)
+    {
+        if (destinationType == typeof(string))
+        {
+            return ((Pos)value).x + "," + ((Pos)value).y + "," + ((Pos)value).z;
+        }
+        return base.ConvertTo(context, culture, value, destinationType);
+    }
+}
+
+[TypeConverter(typeof(PosConverter))]
+[Serializable]
 public class Pos
 {
     public int x = 0;

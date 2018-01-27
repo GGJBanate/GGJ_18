@@ -20,9 +20,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4724122391083392}
   - component: {fileID: 114007457572294650}
+  - component: {fileID: 114413921809534796}
   - component: {fileID: 114831844546648666}
   m_Layer: 0
-  m_Name: TrackServer
+  m_Name: GameServer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,6 +74,18 @@ MonoBehaviour:
     i15: 170
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
+--- !u!114 &114413921809534796
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1238935980728894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ae04e6115d30f94da07e18bfd915899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isHostCartOverride: 1
 --- !u!114 &114831844546648666
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -88,3 +101,4 @@ MonoBehaviour:
   trackLength: 10
   deadEndBreakageProbability: 0.8
   serializedTrack: 
+  serializedMap: 

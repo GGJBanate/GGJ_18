@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -29,6 +30,7 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
         {
             controlRoomControllerInstance = Instantiate(controlRoomControllerPrefab, transform.position, transform.rotation);
             controlRoomControllerInstance.track = TrackData.DeserializeFromNetwork(TrackServer.Instance.serializedTrack);
+            controlRoomControllerInstance.map = JsonConvert.DeserializeObject<Dictionary<Pos, TrackPieceData>>(TrackServer.Instance.serializedMap);
             controlRoomControllerInstance.Init();
         }
     }
@@ -38,7 +40,7 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
     {
         try
         {
-            isCartPlayer = TrackServer.Instance.RegisterClient(this);
+            isCartPlayer = GameServer.Instance.RegisterClient(this);
         }
         catch (InvalidOperationException)
         {
