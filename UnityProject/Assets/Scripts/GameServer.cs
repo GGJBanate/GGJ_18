@@ -7,10 +7,9 @@ public class GameServer : NetworkBehaviour
 {
 
     public bool isHostCartOverride = true;
-
-    //TODO write SETTER for it LUCA pls!!!
+    
     [SyncVar]
-    public GameStatus gameStatus = GameStatus.Ongoing;
+    public GameStatus gameStatus = GameStatus.Waiting;
 
     public static GameServer Instance { get; private set; }
 
@@ -58,6 +57,11 @@ public class GameServer : NetworkBehaviour
         throw new InvalidOperationException();
     }
 
+    public void RefreshWaiting()
+    {
+        gameStatus = controlRoomPlayer || cartPlayer ? GameStatus.Ongoing : GameStatus.Waiting;
+    }
+
     public void SendChatMessage(string message, LocalPlayerNetworkConnection sender)
     {
         LocalPlayerNetworkConnection receiver = sender == cartPlayer ? controlRoomPlayer : cartPlayer;
@@ -69,5 +73,6 @@ public class GameServer : NetworkBehaviour
 public enum GameStatus {
     Ongoing = 0,
     Won = 1,
-    GameOver = 2
+    GameOver = 2,
+    Waiting = 3
 }
