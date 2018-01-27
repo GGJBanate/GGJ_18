@@ -396,6 +396,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvas: {fileID: 1843446727534584}
   hexagon: {fileID: 21300000, guid: d79c9f4c3c5a142a0b258b91fbf05d7e, type: 3}
+  hexagonStraight: {fileID: 21300000, guid: 5eb6a7e5458704367bc13ece46ddf33a, type: 3}
+  hexagonTwoWayJunction: {fileID: 21300000, guid: ebf098f48128f458eb7935094be213c5,
+    type: 3}
+  hexagonThreeWayJunction: {fileID: 21300000, guid: 8aa5cc0bc42a64074b370aa5068c8a07,
+    type: 3}
+  hexagonFinish: {fileID: 21300000, guid: 09f73a60d27d9415aa30a0f6d87275f1, type: 3}
+  hexagonDeadEnd: {fileID: 21300000, guid: cf7b718be85e2474eaaa0f622818d915, type: 3}
+  hexagonStart: {fileID: 21300000, guid: c7ec40d4b98c7462f8df2ebf95a78093, type: 3}
 --- !u!114 &114744633876616516
 MonoBehaviour:
   m_ObjectHideFlags: 1

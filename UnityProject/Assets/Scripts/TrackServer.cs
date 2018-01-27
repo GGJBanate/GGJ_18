@@ -16,7 +16,7 @@ public class TrackServer : NetworkBehaviour
 
     public float deadEndBreakageProbability = .8f;
 
-    public Dictionary<Pos, TrackPieceData> map = new Dictionary<Pos, TrackPieceData>();
+    public Dictionary<Pos, TrackPieceData> map = new Dictionary<Pos, TrackPieceData>(new Pos.EqualityComparer());
 
     public static TrackServer Instance { get; private set; }
 
@@ -42,7 +42,8 @@ public class TrackServer : NetworkBehaviour
     {
         TrackData generatedTrack = new TrackData(Orientation.NN);
         generatedTrack.type = TrackType.Start;
-        this.GenerateTrackStep(depth, new Pos(), Orientation.NN, false, generatedTrack);
+        map.Add(new Pos(), new TrackPieceData(generatedTrack.o, generatedTrack.type));
+        this.GenerateTrackStep(depth, new Pos(0,-1), Orientation.NN, false, generatedTrack);
 
         return generatedTrack;
     }
@@ -50,14 +51,18 @@ public class TrackServer : NetworkBehaviour
 
     private void GenerateTrackStep(int depth, Pos pos, Orientation o, bool broken, TrackData parent)
     {
-        TrackData generatedTrack = new TrackData(o);
-        parent.track.Add(generatedTrack);
+        // if(map.ContainsKey(pos)) return;
 
+        TrackData generatedTrack = new TrackData(o);
+        TrackPieceData tpd = new TrackPieceData(generatedTrack.o, generatedTrack.type);
+        parent.track.Add(generatedTrack);
+        map.Add(pos, tpd);
 
         if (!broken && depth > trackLength)
         {
             generatedTrack.type = TrackType.Finish;
-            map.Add(pos, new TrackPieceData(generatedTrack.o, generatedTrack.type));
+            tpd.type = generatedTrack.type;
+            map[pos] = tpd;
             return;
         }
 
@@ -65,7 +70,8 @@ public class TrackServer : NetworkBehaviour
         if (broken && Random.value < deadEndBreakageProbability)
         {
             generatedTrack.type = TrackType.DeadEnd;
-            map.Add(pos, new TrackPieceData(generatedTrack.o, generatedTrack.type));
+            tpd.type = generatedTrack.type;
+            map[pos] = tpd;
             return;
         }
 
@@ -74,49 +80,54 @@ public class TrackServer : NetworkBehaviour
         Pos pC = pos.Go(o, 0);
         Pos pR = pos.Go(o, +1);
 
-        switch (Random.Range(0, 4))
+        switch (Random.Range(0, 8))
         {
             case 0:
             case 1:
+            case 2:
+            case 3:
                 if (map.ContainsKey(pL))
                 {
-                    generatedTrack.type = TrackType.DeadEnd;
+                    generatedTrack.type = broken ? TrackType.DeadEnd : TrackType.Finish;
                     break;
                 }
 
                 generatedTrack.type = TrackType.Straight;
-                GenerateTrackStep(depth + 1, pos.Go(o, 0), o, broken, generatedTrack);
+                GenerateTrackStep(depth + 1, pC, o, broken, generatedTrack);
                 break;
 
 
-            case 2:
+            case 4:
+            case 5:
+            case 6:
                 if (map.ContainsKey(pL) || map.ContainsKey(pR))
-                    goto case 1;
+                    goto case 0;
 
                 int brokenDir = Random.Range(0, 2);
                 generatedTrack.type = TrackType.TwoWayJunction;
-                GenerateTrackStep(depth + 1, pL, (Orientation) ((int) (o + 5) % 6), brokenDir == 0 ? true : broken,
+                GenerateTrackStep(depth + 1, pL, (Orientation) ((int) (o + 5) % 6), brokenDir != 0 ? true : broken,
                     generatedTrack);
-                GenerateTrackStep(depth + 1, pR, (Orientation) ((int) (o + 1) % 6), brokenDir == 1 ? true : broken,
+                GenerateTrackStep(depth + 1, pR, (Orientation) ((int) (o + 1) % 6), brokenDir != 1 ? true : broken,
                     generatedTrack);
                 break;
 
 
-            case 3:
+            case 7:
                 if (map.ContainsKey(pL) || map.ContainsKey(pC) || map.ContainsKey(pR))
-                    goto case 2;
+                    goto case 4;
 
                 brokenDir = Random.Range(0, 3);
                 generatedTrack.type = TrackType.ThreeWayJunction;
-                GenerateTrackStep(depth + 1, pL, (Orientation) ((int) (o + 5) % 6), brokenDir == 0 ? true : broken,
+                GenerateTrackStep(depth + 1, pL, (Orientation) ((int) (o + 5) % 6), brokenDir != 0 ? true : broken,
                     generatedTrack);
-                GenerateTrackStep(depth + 1, pC, o, brokenDir == 1 ? true : broken, generatedTrack);
-                GenerateTrackStep(depth + 1, pR, (Orientation) ((int) (o + 1) % 6), brokenDir == 2 ? true : broken,
+                GenerateTrackStep(depth + 1, pC, o, brokenDir != 1 ? true : broken, generatedTrack);
+                GenerateTrackStep(depth + 1, pR, (Orientation) ((int) (o + 1) % 6), brokenDir != 2 ? true : broken,
                     generatedTrack);
                 break;
         }
 
-        map.Add(pos, new TrackPieceData(generatedTrack.o, generatedTrack.type));
+        tpd.type = generatedTrack.type;
+        map[pos] = tpd;
     }
 }
 
@@ -207,24 +218,42 @@ public class Pos
                 ret.y -= 1;
                 break;
             case Orientation.NE:
+                ret.y -= (this.x + 100) % 2 == 0 ? 0 : 1;
                 ret.x += 1;
-                ret.y -= 1;
                 break;
             case Orientation.SE:
+                ret.y += (this.x + 100) % 2 == 0 ? 1 : 0;
                 ret.x += 1;
                 break;
             case Orientation.SS:
                 ret.y += 1;
                 break;
             case Orientation.SW:
+                ret.y += (this.x + 100) % 2 == 0 ? 1 : 0;
                 ret.x -= 1;
                 break;
             case Orientation.NW:
+                ret.y -= (this.x + 100) % 2 == 0 ? 0 : 1;
                 ret.x -= 1;
-                ret.y -= 1;
                 break;
         }
 
         return ret;
+    }
+
+    public String ToString() {
+        return "(" + x + " " + y + " " + z + ")";
+    }
+
+    public class EqualityComparer : IEqualityComparer<Pos> {
+
+        public bool Equals (Pos a, Pos b) {
+            return a.x == b.x && a.y == b.y && a.z == b.z;
+        }
+
+        public int GetHashCode (Pos a) {
+            return 10000 * (100 + a.x) + 100 * (100 + a.y) + a.z;
+        }
+
     }
 }
