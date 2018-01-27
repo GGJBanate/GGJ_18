@@ -11,6 +11,10 @@ public class GameServer : NetworkBehaviour
     [SyncVar]
     public GameStatus gameStatus = GameStatus.Waiting;
 
+    //TODO write SETTER for it LUCA pls!!!
+    [SyncVar]
+    public bool crossesAreOpen = false;
+
     public static GameServer Instance { get; private set; }
 
 

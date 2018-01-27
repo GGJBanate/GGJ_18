@@ -91,4 +91,14 @@ public class TrackPiece : MonoBehaviour
 
         nextPiecesSpawned = true;
     }
+
+    void Update(){
+        if(type != TrackType.Crossing){
+            return;
+        }
+        GameServer gs = GameServer.Instance;
+        if(gs.crossesAreOpen){
+            ;//Change the mesh of the crossing at the track to Open
+        }
+    }
 }

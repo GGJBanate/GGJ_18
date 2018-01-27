@@ -153,7 +153,7 @@ public class CartPlayerController : MonoBehaviour
     private void Move()
     {
         GameServer gameServer = GameServer.Instance;
-        if (gameServer.gameStatus == GameStatus.Won || gameServer.gameStatus == GameStatus.GameOver)
+        if (gameServer.gameStatus != GameStatus.Ongoing)
         {
             //Nowhere to move now...
             return;
@@ -167,10 +167,10 @@ public class CartPlayerController : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, currentTrack.transform.rotation, 0.1f);
 
         //Check and Change GameStatus
-        updateGameStatus(realSpeed);
+        UpdateGameStatus(realSpeed);
     }
 
-    private void changeStateAtEndTo(GameStatus newStatus)
+    private void ChangeStateAtEndTo(GameStatus newStatus)
     {
         if (currentTrack.EndPos == transform.position)
         {
@@ -178,7 +178,7 @@ public class CartPlayerController : MonoBehaviour
         }
     }
 
-    private void updateGameStatus(float realSpeed)
+    private void UpdateGameStatus(float realSpeed)
     {
         switch (currentTrack.type)
         {
@@ -190,10 +190,10 @@ public class CartPlayerController : MonoBehaviour
 
                 break;
             case TrackType.Finish:
-                changeStateAtEndTo(GameStatus.Won);
+                ChangeStateAtEndTo(GameStatus.Won);
                 break;
             case TrackType.DeadEnd:
-                changeStateAtEndTo(GameStatus.GameOver);
+                ChangeStateAtEndTo(GameStatus.GameOver);
                 break;
             case TrackType.Danger:
                 if (realSpeed > topSpeed / 2)
