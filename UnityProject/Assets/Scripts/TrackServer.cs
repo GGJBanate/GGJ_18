@@ -83,19 +83,15 @@ public class TrackServer : NetworkBehaviour
         switch (RandomTrackType())
         {
             case TrackType.Straight:
-                if (map.ContainsKey(pC))
-                {
-                    generatedTrack.type = broken ? TrackType.DeadEnd : TrackType.Finish;
-                    break;
-                }
+                GenerateTrackStepStraight(TrackType.Straight, pC, oC, generatedTrack, broken, depth);
+                break;
 
-                generatedTrack.type = TrackType.Straight;
-                map.Add(pC, new TrackPieceData(oC));
+            case TrackType.Broken:
+                GenerateTrackStepStraight(TrackType.Broken, pC, oC, generatedTrack, broken, depth);
+                break;
 
-                GenerateTrackStep(depth + 1, pC, oC, broken, generatedTrack);
-
-                generatedTrack.track[0].data.switchActive = true;
-                generatedTrack.data.activeChild = 0;
+            case TrackType.Danger:
+                GenerateTrackStepStraight(TrackType.Danger, pC, oC, generatedTrack, broken, depth);
                 break;
 
             case TrackType.TwoWayJunction:
@@ -162,14 +158,31 @@ public class TrackServer : NetworkBehaviour
         map[pos] = tpd;
     }
 
+    private void GenerateTrackStepStraight(TrackType type, Pos p, Orientation o, TrackData generatedTrack, bool broken, int depth) {
+                if (map.ContainsKey(p))
+                {
+                    generatedTrack.type = broken ? TrackType.DeadEnd : TrackType.Finish;
+                    return;
+                }
+
+                generatedTrack.type = type;
+                map.Add(p, new TrackPieceData(o));
+
+                GenerateTrackStep(depth + 1, p, o, broken, generatedTrack);
+
+                generatedTrack.track[0].data.switchActive = true;
+                generatedTrack.data.activeChild = 0;
+                return;
+    }
+
     private TrackType RandomTrackType(int type = -1) {
-        switch(type < 0 ? Random.Range(0, 8) : type) {
+        switch(type < 0 ? Random.Range(0, 10) : type) {
             case 0:
             case 1:
             case 2:
             case 3:
                 return TrackType.Straight;
-                
+
             case 4:
             case 5:
             case 6:
@@ -177,6 +190,12 @@ public class TrackServer : NetworkBehaviour
 
             case 7:
                 return TrackType.ThreeWayJunction;
+
+            case 8:
+                return TrackType.Broken;
+
+            case 9:
+                return TrackType.Danger;
 
             default:
                 return TrackType.Straight;
