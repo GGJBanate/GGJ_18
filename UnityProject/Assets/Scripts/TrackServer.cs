@@ -42,22 +42,20 @@ public class TrackServer : NetworkBehaviour
     {
         TrackData generatedTrack = new TrackData(Orientation.NN);
         generatedTrack.type = TrackType.Start;
-        map.Add(new Pos(), new TrackPieceData(generatedTrack.o, generatedTrack.type));
-        this.GenerateTrackStep(depth, new Pos(0,-1), Orientation.NN, false, generatedTrack);
+        map.Add(new Pos(), new TrackPieceData(0, generatedTrack.o, generatedTrack.type, false));
+        this.GenerateTrackStep(depth, new Pos(0, -1), Orientation.NN, false, generatedTrack);
         generatedTrack.track[0].data.switchActive = true;
         generatedTrack.data.activeChild = 0;
 
         return generatedTrack;
     }
-
-
+    
     private void GenerateTrackStep(int depth, Pos pos, Orientation o, bool broken, TrackData parent)
     {
         // if(map.ContainsKey(pos)) return;
 
         TrackData generatedTrack = new TrackData(o);
-        TrackPieceData tpd = new TrackPieceData(generatedTrack.o, generatedTrack.type);
-        tpd.id = map.Count;
+        TrackPieceData tpd = new TrackPieceData(map.Count, generatedTrack.o, generatedTrack.type, broken);
         parent.track.Add(generatedTrack);
         map.Add(pos, tpd);
 
@@ -77,8 +75,7 @@ public class TrackServer : NetworkBehaviour
             map[pos] = tpd;
             return;
         }
-
-
+        
         Pos pL = pos.Go(o, -1);
         Pos pC = pos.Go(o, 0);
         Pos pR = pos.Go(o, +1);
@@ -101,7 +98,6 @@ public class TrackServer : NetworkBehaviour
                 generatedTrack.data.activeChild = 0;
                 break;
 
-
             case 4:
             case 5:
             case 6:
@@ -119,7 +115,6 @@ public class TrackServer : NetworkBehaviour
                 generatedTrack.track[activeChild].data.switchActive = true;
                 generatedTrack.data.activeChild = activeChild;
                 break;
-
 
             case 7:
                 if (map.ContainsKey(pL) || map.ContainsKey(pC) || map.ContainsKey(pR))
@@ -151,14 +146,16 @@ public struct TrackPieceData
     public bool switchActive;
     public int activeChild;
     public int id;
+    public bool brokenPath;
 
-    public TrackPieceData(Orientation o, TrackType type)
+    public TrackPieceData(int id, Orientation o, TrackType type, bool broken)
     {
         this.o = o;
         this.type = type;
         this.switchActive = false;
         this.activeChild = 0;
-        this.id = -1;
+        this.id = id;
+        this.brokenPath = broken;
     }
 }
 
@@ -167,32 +164,36 @@ public class PosConverter : TypeConverter
     public override bool CanConvertFrom(ITypeDescriptorContext context,
         Type sourceType)
     {
-
         if (sourceType == typeof(string))
         {
             return true;
         }
+
         return base.CanConvertFrom(context, sourceType);
     }
+
     // Overrides the ConvertFrom method of TypeConverter.
     public override object ConvertFrom(ITypeDescriptorContext context,
         CultureInfo culture, object value)
     {
         if (value is string)
         {
-            string[] v = ((string)value).Split(',');
+            string[] v = ((string) value).Split(',');
             return new Pos(int.Parse(v[0]), int.Parse(v[1]), int.Parse(v[2]));
         }
+
         return base.ConvertFrom(context, culture, value);
     }
+
     // Overrides the ConvertTo method of TypeConverter.
     public override object ConvertTo(ITypeDescriptorContext context,
         CultureInfo culture, object value, Type destinationType)
     {
         if (destinationType == typeof(string))
         {
-            return ((Pos)value).x + "," + ((Pos)value).y + "," + ((Pos)value).z;
+            return ((Pos) value).x + "," + ((Pos) value).y + "," + ((Pos) value).z;
         }
+
         return base.ConvertTo(context, culture, value, destinationType);
     }
 }
@@ -259,19 +260,21 @@ public class Pos
         return ret;
     }
 
-    public String ToString() {
+    public String ToString()
+    {
         return "(" + x + " " + y + " " + z + ")";
     }
 
-    public class EqualityComparer : IEqualityComparer<Pos> {
-
-        public bool Equals (Pos a, Pos b) {
+    public class EqualityComparer : IEqualityComparer<Pos>
+    {
+        public bool Equals(Pos a, Pos b)
+        {
             return a.x == b.x && a.y == b.y && a.z == b.z;
         }
 
-        public int GetHashCode (Pos a) {
+        public int GetHashCode(Pos a)
+        {
             return 10000 * (100 + a.x) + 100 * (100 + a.y) + a.z;
         }
-
     }
 }
