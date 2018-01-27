@@ -42,7 +42,9 @@ public class Messenger : MonoBehaviour {
 
 	public void receiveMsg(string msg) {
 		this.gameObject.SetActive (true);
+		Debug.Log (msg);
 		displayMsg (msg, PartnerTextPrefab);
+		focusInputField ();
 	}
 
 	private void send() {

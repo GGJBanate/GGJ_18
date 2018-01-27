@@ -57,7 +57,7 @@ public class GameServer : MonoBehaviour
     public void SendChatMessage(string message, LocalPlayerNetworkConnection sender)
     {
         LocalPlayerNetworkConnection receiver = sender == cartPlayer ? controlRoomPlayer : cartPlayer;
-
+		//sender.RpcReceiveMessage(message);
         receiver.RpcReceiveMessage(message);
     }
 }
