@@ -249,11 +249,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1843390151914268}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-<<<<<<< HEAD
   m_LocalPosition: {x: 12, y: 0, z: 0}
-=======
-  m_LocalPosition: {x: -19.6, y: 0, z: 0}
->>>>>>> a532d444e8471edebbf51c7e3b78da10001be419
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4965934117519060}
@@ -262,7 +258,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-<<<<<<< HEAD
 --- !u!4 &4655650003768340
 Transform:
   m_ObjectHideFlags: 1
@@ -277,8 +272,6 @@ Transform:
   m_Father: {fileID: 4627956379287430}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-=======
->>>>>>> a532d444e8471edebbf51c7e3b78da10001be419
 --- !u!4 &4759023826432752
 Transform:
   m_ObjectHideFlags: 1
@@ -457,7 +450,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-<<<<<<< HEAD
 --- !u!23 &23736942624449204
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -495,8 +487,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-=======
->>>>>>> a532d444e8471edebbf51c7e3b78da10001be419
 --- !u!33 &33031624579815106
 MeshFilter:
   m_ObjectHideFlags: 1
