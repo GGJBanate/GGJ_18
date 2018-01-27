@@ -389,6 +389,18 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: -17
       objectReference: {fileID: 0}
+    - target: {fileID: 114104726311454910, guid: 3f6af3cd1be837f4199ba1ead3976007,
+        type: 2}
+      propertyPath: OwnTextPrefab
+      value: 
+      objectReference: {fileID: 1693760149929498, guid: 43655a6feb15d884b9eb5b8f991a325f,
+        type: 2}
+    - target: {fileID: 114104726311454910, guid: 3f6af3cd1be837f4199ba1ead3976007,
+        type: 2}
+      propertyPath: PartnerTextPrefab
+      value: 
+      objectReference: {fileID: 1478316872221474, guid: 98a1c2caa0a1c7945b8fe49efa02439d,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3f6af3cd1be837f4199ba1ead3976007, type: 2}
   m_IsPrefabParent: 0
