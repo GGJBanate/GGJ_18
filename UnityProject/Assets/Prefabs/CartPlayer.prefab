@@ -146,7 +146,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1588753924750416}
   m_LocalRotation: {x: 0.12508838, y: -0, z: -0, w: 0.9921456}
-  m_LocalPosition: {x: 0.000001996526, y: 1.197, z: -0.273}
+  m_LocalPosition: {x: 0.000001996526, y: 3.935, z: 0.041}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4904361764288114}
@@ -185,7 +185,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1902958526823232}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 73.300514, y: 13.256511, z: 1.1259949}
+  m_LocalPosition: {x: 25.526934, y: 10.010766, z: 56.55018}
   m_LocalScale: {x: 0.6866461, y: 0.37116998, z: 0.8281285}
   m_Children:
   - {fileID: 4119915416749128}
@@ -355,6 +355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lamp: {fileID: 1588753924750416}
+  playerCamera: {fileID: 20162247546691682}
   breaksEffect: {fileID: 198821006473922654}
   maximumBreakPower: 100
   breakPowerBurnRate: 20
