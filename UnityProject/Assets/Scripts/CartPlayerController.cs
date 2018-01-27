@@ -105,7 +105,7 @@ public class CartPlayerController : MonoBehaviour
         {
             LeverLeft.SetActive(false);
             LeverRight.SetActive(false);
-            LeverForward.SetActive(true);
+            LeverForward.SetActive(false);
             return;
         }
 
