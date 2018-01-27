@@ -30,7 +30,7 @@ public class Messenger : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKeyDown("return")) {
+		if(Input.GetButtonDown("Submit")) {
 			send();
 		}
 	}
