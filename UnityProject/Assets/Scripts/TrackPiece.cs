@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TrackPiece : MonoBehaviour
@@ -7,7 +8,8 @@ public class TrackPiece : MonoBehaviour
     public static float pieceLength = 10;
     public static float pieceHeight = 1;
 
-    public Vector3 EndPos {
+    public Vector3 EndPos
+    {
         get
         {
             var pos = new Vector3(0, pieceHeight / 2, pieceLength / 2);
@@ -17,8 +19,7 @@ public class TrackPiece : MonoBehaviour
 
     public List<GameObject> nextPiecePositions;
 
-    [HideInInspector]
-    public TrackData pieceData;
+    [HideInInspector] public TrackData pieceData;
 
     public TrackType type = TrackType.Straight;
 
@@ -26,23 +27,39 @@ public class TrackPiece : MonoBehaviour
 
     private bool nextPiecesSpawned;
 
+    private TrackEntryCollider entryCollider;
+
     public void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        
-        Vector3 tmp = TrackController.Instance.transform.forward;
-        Vector3 dir = new Vector3(tmp.x, tmp.y, tmp.z);
 
-        Quaternion rot = Quaternion.AngleAxis( ((int)pieceData.o) * 60, Vector3.up);
+        if (TrackController.Instance != null)
+        {
+            Vector3 tmp = TrackController.Instance.transform.forward;
+            Vector3 dir = new Vector3(tmp.x, tmp.y, tmp.z);
 
-        DrawArrow.ForGizmo(EndPos, rot * dir);
+            Quaternion rot = Quaternion.AngleAxis(((int) pieceData.o) * 60, Vector3.up);
+
+            DrawArrow.ForGizmo(EndPos, rot * dir);
+        }
+        else
+        {
+            DrawArrow.ForGizmo(EndPos, transform.forward);
+        }
+    }
+
+    public void Awake()
+    {
+        entryCollider = GetComponentsInChildren<TrackEntryCollider>().First();
+        entryCollider.track = this;
     }
 
     public void Start()
     {
         if (type == TrackType.Start)
         {
-            CartPlayerController player = Instantiate(TrackController.Instance.playerPrefab, spawnPos.position, transform.rotation);
+            CartPlayerController player = Instantiate(TrackController.Instance.playerPrefab, spawnPos.position,
+                transform.rotation);
             player.currentTrack = this;
         }
     }
@@ -56,12 +73,18 @@ public class TrackPiece : MonoBehaviour
             return;
         }
 
+        int activeChildRoute = Random.Range(0, pieceData.track.Count);
+
         for (int index = 0; index < pieceData.track.Count; index++)
         {
             TrackData data = pieceData.track[index];
             TrackPiece p = TrackController.Instance.BuildPiece(data, nextPiecePositions[index].transform);
+            p.entryCollider.active = activeChildRoute == index;
 
-            if(TrackController.Instance.debug) { p.SpawnNextPieces(); }
+            if (TrackController.Instance.debug)
+            {
+                p.SpawnNextPieces();
+            }
         }
 
         nextPiecesSpawned = true;

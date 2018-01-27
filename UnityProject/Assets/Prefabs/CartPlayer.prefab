@@ -239,8 +239,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.81, y: 2.1387465, z: 1.2788495}
-  m_Center: {x: 0, y: 0.56937313, z: 0.13942465}
+  m_Size: {x: 0.46, y: 1.85, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!81 &81980630810787822
 AudioListener:
   m_ObjectHideFlags: 1
@@ -299,9 +299,9 @@ MonoBehaviour:
   breaksEffect: {fileID: 198821006473922654}
   maximumBreakPower: 100
   breakPowerBurnRate: 20
-  topSpeed: 10
-  minSpeed: 3
-  acceleration: 3
+  topSpeed: 8
+  minSpeed: 2
+  acceleration: 0.1
   currentTrack: {fileID: 0}
 --- !u!124 &124722970442433548
 Behaviour:
