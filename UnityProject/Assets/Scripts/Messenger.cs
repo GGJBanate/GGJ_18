@@ -9,12 +9,14 @@ public class Messenger : MonoBehaviour {
 	public GameObject view;
 	public GameObject input;
 	private float textOffset;
+	private InputField field;
 
 	public GameObject OwnTextPrefab;
 	public GameObject PartnerTextPrefab;
 
 	// Use this for initialization
 	void Start () {
+		field = input.GetComponent<InputField>();
 		this.gameObject.SetActive(false);
 	}
 	
@@ -25,14 +27,17 @@ public class Messenger : MonoBehaviour {
 		}
 	}
 
+	public void focusInputField() {
+		field.Select();
+		field.ActivateInputField();
+	}
+
 	private void send() {
-		if(input != null && view != null) {
-			InputField field = input.GetComponent<InputField>();
+		if(field != null && view != null) {
 			displayMsg (field.text);
 			// Send via network here
 			field.text = "";
-			field.Select();
-			field.ActivateInputField();
+			focusInputField ();
 		}
 	}
 
@@ -41,4 +46,5 @@ public class Messenger : MonoBehaviour {
 		chatText.GetComponentInChildren<Text>().text = msg;
 		chatText.transform.SetParent(view.transform, false);
 	}
+
 }
