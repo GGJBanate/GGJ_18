@@ -16,7 +16,7 @@ public class TrackServer : NetworkBehaviour
 
     public float deadEndBreakageProbability = .8f;
 
-    public Dictionary<Pos, TrackPieceData> map = new Dictionary<Pos, TrackPieceData>();
+    public Dictionary<Pos, TrackPieceData> map = new Dictionary<Pos, TrackPieceData>(new Pos.EqualityComparer());
 
     private static TrackServer instance;
 
@@ -239,5 +239,17 @@ public class Pos
         }
 
         return ret;
+    }
+
+    public class EqualityComparer : IEqualityComparer<Pos> {
+
+        public bool Equals (Pos a, Pos b) {
+            return a.x == b.x && a.y == b.y && a.z == b.z;
+        }
+
+        public int GetHashCode(Pos a) {
+            return 100 + a.x + 100 * (100 + a.y) + 10000 * (100 + a.z);
+        }
+
     }
 }
