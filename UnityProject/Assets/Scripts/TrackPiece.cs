@@ -27,7 +27,7 @@ public class TrackPiece : MonoBehaviour
 
     private bool nextPiecesSpawned;
 
-    private TrackEntryCollider entryCollider;
+    public TrackEntryCollider entryCollider;
 
     public void OnDrawGizmos()
     {
@@ -77,6 +77,7 @@ public class TrackPiece : MonoBehaviour
         {
             TrackData data = pieceData.track[index];
             TrackPiece p = TrackController.Instance.BuildPiece(data, nextPiecePositions[index].transform);
+
             p.entryCollider.active = data.data.switchActive;
 
             if (TrackController.Instance.debug)

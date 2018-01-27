@@ -5,7 +5,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using Newtonsoft.Json;
 using UnityEngine;
-using UnityEditor;
 
 public class TrackData
 {

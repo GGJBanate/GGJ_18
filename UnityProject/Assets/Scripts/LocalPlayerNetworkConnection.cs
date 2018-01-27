@@ -35,6 +35,12 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
         }
     }
 
+    [ClientRpc]
+    public void RpcSetSwitchState(int trackPieceId, int switchDirection)
+    {
+        TrackController.Instance.SetSwitchState(trackPieceId, switchDirection);
+    }
+
     [Command]
     private void CmdRegisterClient()
     {
@@ -61,7 +67,7 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
 		Messenger.Instance.receiveMsg(message);
     }
 
-	public void sendMessage(string msg) {
+	public void SendChatMessage(string msg) {
 		if (isLocalPlayer) {
 			CmdSendMessage (msg);
 		}

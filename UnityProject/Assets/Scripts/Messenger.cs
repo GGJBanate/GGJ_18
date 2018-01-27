@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor;
 using UnityEngine.Events;
 
 public class Messenger : MonoBehaviour {
@@ -52,7 +51,7 @@ public class Messenger : MonoBehaviour {
 			if (connectionObj != null) {
 				LocalPlayerNetworkConnection connection = connectionObj.GetComponent<LocalPlayerNetworkConnection> ();
 				Debug.Log ("Sending Message via network");
-				connection.sendMessage (field.text);
+				connection.SendChatMessage (field.text);
 			} else {
 				Debug.Log ("Message was not sent");
 			}

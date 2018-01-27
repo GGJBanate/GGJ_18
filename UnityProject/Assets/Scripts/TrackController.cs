@@ -38,4 +38,48 @@ public class TrackController : MonoBehaviour
 
         return piece;
     }
+
+    public void SetSwitchState(int trackPieceId, int switchDirection)
+    {
+        SetSwitchState(track, trackPieceId, switchDirection);
+    }
+
+    private void SetSwitchState(TrackData trackPiece, int trackPieceId, int switchDirection)
+    {
+        if (trackPiece.data.id == trackPieceId)
+        {
+            for (int index = 0; index < trackPiece.track.Count; index++)
+            {
+                TrackData child = trackPiece.track[index];
+                child.data.switchActive = index == switchDirection;
+            }
+        }
+        else
+        {
+            foreach (TrackData child in trackPiece.track)
+            {
+                SetSwitchState(child, trackPieceId, switchDirection);
+            }
+        }
+
+        var trackPieces = FindObjectsOfType<TrackPiece>();
+
+        foreach (TrackPiece piece in trackPieces)
+        {
+            if (piece.pieceData.data.id == trackPieceId)
+            {
+                var target = piece.pieceData.track[switchDirection].data.id;
+
+                foreach (TrackPiece p in trackPieces)
+                {
+                    if (p.pieceData.data.id == target)
+                    {
+                        p.entryCollider.active = true;
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    }
 }
