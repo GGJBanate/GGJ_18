@@ -58,6 +58,12 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
     [ClientRpc]
     public void RpcReceiveMessage(string message)
     {
-        // TODO
+		Messenger.Instance.receiveMsg(message);
     }
+
+	public void sendMessage(string msg) {
+		if (isLocalPlayer) {
+			CmdSendMessage (msg);
+		}
+	}
 }

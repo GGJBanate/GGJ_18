@@ -3,16 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
+using UnityEngine.Events;
 
 public class Messenger : MonoBehaviour {
+
+	public static Messenger Instance { get; private set; }
 
 	public GameObject view;
 	public GameObject input;
 	private float textOffset;
+
 	private InputField field;
 
 	public GameObject OwnTextPrefab;
 	public GameObject PartnerTextPrefab;
+
+	void Awake() {
+		Instance = this;
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -32,17 +40,29 @@ public class Messenger : MonoBehaviour {
 		field.ActivateInputField();
 	}
 
+	public void receiveMsg(string msg) {
+		this.gameObject.SetActive (true);
+		displayMsg (msg, PartnerTextPrefab);
+	}
+
 	private void send() {
+		GameObject connectionObj = GameObject.Find ("LocalPlayerNetworkConnection(Clone)"); 
 		if(field != null && view != null) {
-			displayMsg (field.text);
-			// Send via network here
+			displayMsg (field.text, OwnTextPrefab);
+			if (connectionObj != null) {
+				LocalPlayerNetworkConnection connection = connectionObj.GetComponent<LocalPlayerNetworkConnection> ();
+				Debug.Log ("Sending Message via network");
+				connection.sendMessage (field.text);
+			} else {
+				Debug.Log ("Message was not sent");
+			}
 			field.text = "";
 			focusInputField ();
 		}
 	}
 
-	private void displayMsg(string msg) {
-		GameObject chatText = Instantiate(OwnTextPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+	private void displayMsg(string msg, GameObject prefab) {
+		GameObject chatText = Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
 		chatText.GetComponentInChildren<Text>().text = msg;
 		chatText.transform.SetParent(view.transform, false);
 	}
