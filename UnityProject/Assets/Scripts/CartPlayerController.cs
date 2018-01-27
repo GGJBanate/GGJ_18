@@ -137,9 +137,35 @@ public class CartPlayerController : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, currentTrack.EndPos, realSpeed * Time.deltaTime);
         transform.rotation = Quaternion.Lerp(transform.rotation, currentTrack.transform.rotation, 0.1f);
 
-        //Check GameStatus
+        //Check and Change GameStatus
+        updateGameStatus(realSpeed);
+    }
+
+    private void changeStateAtEndTo(GameStatus newStatus){
+        if(currentTrack.EndPos == transform.position){
+            //SET GameSTatus to newStatus
+        }
+    }
+
+    private void updateGameStatus(float realSpeed){
         switch(currentTrack.type){
-            case TrackType.Broken : break;
+            case TrackType.Broken : 
+                if(realSpeed < topSpeed/2){
+                    //SET GameStatus to GAME_OVER
+                }
+                break;
+            case TrackType.Finish : 
+                changeStateAtEndTo(GameStatus.Won);
+                break;
+            case TrackType.DeadEnd :
+                changeStateAtEndTo(GamesStatus.GameOver);
+                break;
+            case TrackType.Danger :
+                if(realSpeed > topSpeed/2){
+                    //SET GameStatus to GAME_OVER
+                }
+                break;
+            default : break;
         }
     }
 
