@@ -19,6 +19,9 @@ public class TrackPiece : MonoBehaviour
 
     public List<GameObject> nextPiecePositions;
 
+    [HideInInspector]
+    public List<TrackPiece> nextPieces = new List<TrackPiece>();
+
     [HideInInspector] public TrackData pieceData;
 
     public TrackType type = TrackType.Straight;
@@ -79,6 +82,8 @@ public class TrackPiece : MonoBehaviour
             TrackPiece p = TrackController.Instance.BuildPiece(data, nextPiecePositions[index].transform);
 
             p.entryCollider.active = data.data.switchActive;
+
+            nextPieces.Add(p);
 
             if (TrackController.Instance.debug)
                 p.SpawnNextPieces();

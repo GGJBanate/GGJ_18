@@ -17,8 +17,7 @@ public class TrackMapDisplay : MonoBehaviour {
 
     private Dictionary<Pos, TrackPieceData> map;
 
-    private int offsetx;
-    private int offsety;
+    private Vector3 offset;
 
     // Use this for initialization
     void Start () {
@@ -41,16 +40,15 @@ public class TrackMapDisplay : MonoBehaviour {
             if(p.y > bottom) bottom = p.y;
         }
 
-        offsetx = 0;//- (right + left);
-        offsety = 0;//- (top + bottom);
+        offset = new Vector3(- (right + left) / 2, (top + bottom) / 2, 0);
 
         foreach(KeyValuePair<Pos, TrackPieceData> entry in map)
         {
-            AddTextToCanvas("TrackPiece_" +entry.Key.x+ "_"+entry.Key.y, new Pos(entry.Key.x+offsetx, entry.Key.y+offsety), entry.Value);
+            AddTextToCanvas("TrackPiece_" +entry.Key.x+ "_"+entry.Key.y, entry.Key, entry.Value);
         }
 
 
-        Debug.Log("bounderies: " + top + " " + right + " " + bottom + " " + left + "||" + offsetx + " " + offsety );
+        Debug.Log("bounderies: " + top + " " + right + " " + bottom + " " + left + "||" + offset.x + " " + offset.y );
     }
     
     // Update is called once per frame
@@ -65,6 +63,8 @@ public class TrackMapDisplay : MonoBehaviour {
         var newImageComp = newText.AddComponent<Image>();
 
         switch(trackPiece.type) {
+            case TrackType.Broken:
+            case TrackType.Danger:
             case TrackType.Straight: 
                 newImageComp.sprite = hexagonStraight;
                 break;
@@ -98,7 +98,11 @@ public class TrackMapDisplay : MonoBehaviour {
 
         newText.transform.SetParent(canvas.transform);
         newText.transform.localScale = new Vector3(1, 0.866f, 1);
-        newText.transform.localPosition = new Vector3(pos.x, -(pos.y - ( (pos.x+100) % 2 == 0 ? -0.5f : 0) ) , 0) * 100;
+        newText.transform.localPosition = new Vector3(
+            offset.x + pos.x - 0.14f*pos.x, 
+            offset.y - (pos.y - ( (pos.x+100) % 2 == 0 ? -0.5f : 0)), 
+            0
+        ) * 100;
         newText.transform.Rotate(Vector3.forward, ((int)trackPiece.o) * -60);
         return null;
     }
