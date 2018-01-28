@@ -96,6 +96,10 @@ public class TrackServer : NetworkBehaviour
                 GenerateTrackStepStraight(TrackType.Danger, pC, oC, generatedTrack, broken, depth);
                 break;
 
+            case TrackType.Crossing: //TODO change to another visualization
+                GenerateTrackStepStraight(TrackType.Danger, pC, oC, generatedTrack, broken, depth);
+                break;
+
             case TrackType.TwoWayJunction:
                 if (map.ContainsKey(pL) || map.ContainsKey(pR))
                     goto case TrackType.Straight;
