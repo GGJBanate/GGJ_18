@@ -5,16 +5,14 @@ using UnityEngine.Networking;
 
 public class GameServer : NetworkBehaviour
 {
-	public bool DebugMode;
+    public bool DebugMode;
 
     public bool isHostCartOverride = true;
-    
-    [SyncVar]
-    public GameStatus gameStatus = GameStatus.Waiting;
+
+    [SyncVar] public GameStatus gameStatus = GameStatus.Waiting;
 
     //TODO write SETTER for it LUCA pls!!!
-    [SyncVar]
-    public bool crossesAreOpen = false;
+    [SyncVar] public bool crossesAreOpen = false;
 
     public static GameServer Instance { get; private set; }
 
@@ -64,11 +62,14 @@ public class GameServer : NetworkBehaviour
 
     public void RefreshWaiting()
     {
-		if (DebugMode || controlRoomPlayer && cartPlayer && controlRoomPlayer.hasStarted && cartPlayer.hasStarted) {
-			gameStatus = GameStatus.Ongoing;
-		} else {
-			gameStatus = GameStatus.Waiting;
-		}
+        if (DebugMode || controlRoomPlayer && cartPlayer && controlRoomPlayer.hasStarted && cartPlayer.hasStarted)
+        {
+            gameStatus = GameStatus.Ongoing;
+        }
+        else
+        {
+            gameStatus = GameStatus.Waiting;
+        }
     }
 
     public void SendChatMessage(string message, LocalPlayerNetworkConnection sender)
@@ -82,12 +83,15 @@ public class GameServer : NetworkBehaviour
     {
         this.gameStatus = newStatus;
 
-        cartPlayer.RpcNotifyGameStateChange(newStatus);
-        controlRoomPlayer.RpcNotifyGameStateChange(newStatus);
+        if (cartPlayer != null)
+            cartPlayer.RpcNotifyGameStateChange(newStatus);
+        if (controlRoomPlayer != null)
+            controlRoomPlayer.RpcNotifyGameStateChange(newStatus);
     }
 }
 
-public enum GameStatus {
+public enum GameStatus
+{
     Ongoing = 0,
     Won = 1,
     GameOver = 2,
