@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 
 public class GameServer : NetworkBehaviour
 {
+	public bool DebugMode;
 
     public bool isHostCartOverride = true;
     
@@ -63,7 +64,7 @@ public class GameServer : NetworkBehaviour
 
     public void RefreshWaiting()
     {
-		if (controlRoomPlayer && cartPlayer && controlRoomPlayer.hasStarted && cartPlayer.hasStarted) {
+		if (DebugMode || controlRoomPlayer && cartPlayer && controlRoomPlayer.hasStarted && cartPlayer.hasStarted) {
 			gameStatus = GameStatus.Ongoing;
 		} else {
 			gameStatus = GameStatus.Waiting;
