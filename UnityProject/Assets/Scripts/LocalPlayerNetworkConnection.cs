@@ -12,7 +12,6 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
 
     [SyncVar] public bool isCartPlayer;
 
-
     [SyncVar] public bool hasStarted;
 
     private TrackController trackControllerInstance;
