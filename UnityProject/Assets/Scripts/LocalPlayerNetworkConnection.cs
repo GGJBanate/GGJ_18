@@ -12,7 +12,6 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
 
     [SyncVar] public bool isCartPlayer;
 
-
     [SyncVar] public bool hasStarted;
 
     private TrackController trackControllerInstance;
@@ -102,5 +101,31 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
     {
         this.hasStarted = true;
         GameServer.Instance.RefreshWaiting();
+    }
+
+    private bool barrierSettingBlocked;
+
+    public void ResetBarrier()
+    {
+        barrierSettingBlocked = false;
+
+        CmdSetBarrier();
+    }
+
+    public void SetBarrier()
+    {
+        if (barrierSettingBlocked) return;
+
+        barrierSettingBlocked = true;
+
+        CmdSetBarrier();
+
+        Invoke("ResetBarrier", 4f);
+    }
+
+    [Command]
+    public void CmdSetBarrier()
+    {
+        GameServer.Instance.crossesAreOpen = !GameServer.Instance.crossesAreOpen;
     }
 }
