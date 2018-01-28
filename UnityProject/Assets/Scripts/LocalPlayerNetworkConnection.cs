@@ -10,6 +10,9 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
     public TrackController trackControllerPrefab;
     public ControlRoomController controlRoomControllerPrefab;
 
+    public GameObject winScreen;
+    public GameObject gameOverScreen;
+
     [SyncVar] public bool isCartPlayer;
 
     [SyncVar] public bool hasStarted;
@@ -88,7 +91,7 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
     [Command]
     public void CmdSetGameStatus(GameStatus newStatus)
     {
-        GameServer.Instance.gameStatus = newStatus;
+        GameServer.Instance.SetGameStatus(newStatus);
     }
 
     public void StartGame()
@@ -127,5 +130,15 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
     public void CmdSetBarrier()
     {
         GameServer.Instance.crossesAreOpen = !GameServer.Instance.crossesAreOpen;
+    }
+
+    [ClientRpc]
+    public void RpcNotifyGameStateChange(GameStatus state)
+    {
+        if (isLocalPlayer)
+        {
+            winScreen.SetActive(state == GameStatus.Won);
+            gameOverScreen.SetActive(state == GameStatus.GameOver);
+        }
     }
 }
