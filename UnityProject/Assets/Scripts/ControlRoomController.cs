@@ -19,13 +19,17 @@ public class ControlRoomController : MonoBehaviour
 	private bool started;
     private TrackMapDisplay mapScreen;
 
+    private LocalPlayerNetworkConnection localPlayer;
+
     public void Init()
     {
     	mapScreen = GameObject.Find("MapScreen").GetComponent<TrackMapDisplay>();
     	mapScreen.init(map);
     }
 	public void Start() {
-		intro = Instantiate (intro);
+        localPlayer = FindObjectsOfType<LocalPlayerNetworkConnection>().First(l => l.isLocalPlayer);
+
+        intro = Instantiate (intro);
 		intro.transform.SetAsLastSibling ();
 
 		Text[] introTexts = intro.GetComponentsInChildren<Text> ();
@@ -52,6 +56,13 @@ public class ControlRoomController : MonoBehaviour
 			waitingMessage.gameObject.SetActive(false);
 			intro.SetActive (false);
 			started = true;
+		}
+	    if (GameServer.Instance.gameStatus == GameStatus.Ongoing)
+        {
+            if (Input.GetButtonDown("BarrierSwitch"))
+            {
+                localPlayer.SetBarrier(true);
+            }
 		}
 		mapScreen.map = this.map;
 	}
