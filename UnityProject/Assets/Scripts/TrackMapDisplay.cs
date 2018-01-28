@@ -30,11 +30,12 @@ public class TrackMapDisplay : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        Debug.Log("Update MapDisplay");
+        /*
         foreach(KeyValuePair<Pos, TrackPieceData> entry in map)
         {
             UpdatePiece(entry.Key, entry.Value);
         }
+        */
     }
 
     public void init(Dictionary<Pos, TrackPieceData> map) {
@@ -97,7 +98,7 @@ public class TrackMapDisplay : MonoBehaviour {
         }
 
         for(int z = 0; z < 2; ++z)
-            AddImage(pos, trackPiece.o, s, z, ! trackPiece.brokenPath);
+            AddImage(pos, trackPiece.o, s, z, trackPiece.type == TrackType.Start );
     }
 
     private void AddImage(Pos p, Orientation o, Sprite s, int z = 0, bool highlight = false)
