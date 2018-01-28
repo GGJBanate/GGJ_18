@@ -28,12 +28,11 @@
 
             }
 
-            .game {
-
-            }
-
             .game img {
                 width: 100%;
+                border-radius: .5em;
+                border-top-right-radius: 0;
+                border-top-left-radius: 0;
             }
 
             .gametext {
@@ -45,7 +44,7 @@
                 margin-bottom: 0;
             }
 
-            .team, .special {
+            section {
                 display: grid;
 
                 grid-template-columns: 1fr 1fr;
@@ -55,13 +54,17 @@
                 padding: 1em; 
             }
 
-            .team article,
-            .special article {
+            section article {
                 border-radius: .5em;
                 background: white;
                 padding: 1em;
 
                 min-height: 10em;
+            }
+
+            section.game {
+                grid-template-columns: 1fr;
+                padding-top: 0;
             }
 
             .quote {
@@ -98,7 +101,7 @@
             <img src="./LostMiner.jpg">
 
             <span class="gametext">
-                Player 1 rides a cart through a mine, unable to take any control of it. But they can describe their situation to Player 2 who can switch tracks or clear out the way to get Player 1 out safe.
+                Player 1 steers a cart through a very dark mine. They can describe their situation to Player 2 who can see the map in his control room. He has control over barriers and his objective is to get Player 1 out safe. The control room player can press '1' to open all gates for 4 seconds, and has to tell Player 1 where to go. Player 1 can select a direction and use the breaks. Pieces of the track have signs that tell the player to either break ("Caution") with Spacebar or to go fast "Broken Track".
             </span>
         </section>
         <section class="team">
@@ -113,7 +116,7 @@
             </article>
             <article>
                 <h1>Johannes Ganser</h1>
-                <span class="quote">Hätten wir Haskell benutzt wäre das alles viel besser.</span>
+                <span class="quote">Hätten wir Haskell benutzt, wäre das alles viel besser.</span>
                 <br/>
                 <span class="quote_small">Nein - Alle</span>
                 <br/>
@@ -121,7 +124,7 @@
             </article>
             <article>
                 <h1>Fenja Kollasch</h1>
-                <span class="quote">9 von 10 Software-Engeneers haben sich gerade übergeben.</span>
+                <span class="quote">9 von 10 Software-Engineers haben sich gerade übergeben.</span>
                 <br/>
                 <span class="whatHaveIdone">Messenger, 3D Anpassung, GUI, Plakat</span>
             </article>
@@ -138,8 +141,8 @@
                 <span class="quote">Gebt mir den Glitzerkleber und ich regel das.</span>
             </article>
             <article>
-                <h1>Sonsored by</h1>
-                <h2 style="padding-left: 2em;"><a href="bissel-art.de">Bissel-Art.de</a></h2>
+                <h1>Sponsored by</h1>
+                <h2 style="padding-left: 2em;"><a href="http://bissel-art.de">Bissel-Art.de</a></h2>
             </article>
             <article>
                 <h1>Special thanks to MakerBot</h1>
@@ -147,6 +150,10 @@
                 Published on June 14, 2016<br/>
                 www.thingiverse.com/thing:220617<br/>
             </article>
+        </section>
+        <section>
+            <article><a href="https://globalgamejam.org/2018/games/lost-miner">https://globalgamejam.org/2018/games/lost-miner</a></article>
+            <article><a href="https://github.com/GGJBanate/GGJ_18/">https://github.com/GGJBanate/GGJ_18/</a></article>
         </section>
     </body>
 </html>
