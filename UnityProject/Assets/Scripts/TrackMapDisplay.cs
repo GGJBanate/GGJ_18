@@ -106,11 +106,8 @@ public class TrackMapDisplay : MonoBehaviour {
         Color c = new Color(highlight ? 1f - z*0.5f : 0f, 0f, 0f, 1 - z*0.5f);
 
         var imageComp = go.AddComponent<Image>();
-        // var spriteRenderer = go.AddComponent<SpriteRenderer>();
         imageComp.sprite = s;
         imageComp.color = c;
-        // spriteRenderer.sprite = s;
-        // spriteRenderer.color = c;
 
         go.transform.SetParent(canvas.transform);
         go.transform.localScale = SCALE;
