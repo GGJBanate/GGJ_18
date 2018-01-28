@@ -61,7 +61,6 @@ public class ControlRoomController : MonoBehaviour
         {
             if (Input.GetButtonDown("BarrierSwitch"))
             {
-                Debug.Log("Setting Barrier");
                 localPlayer.SetBarrier();
             }
 		}
