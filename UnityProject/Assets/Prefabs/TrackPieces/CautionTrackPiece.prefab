@@ -122,7 +122,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4712518107995464}
-  - component: {fileID: 65570403983787284}
   m_Layer: 0
   m_Name: railtrack
   m_TagString: Untagged
@@ -519,18 +518,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 4, y: 4, z: 1}
   m_Center: {x: 0, y: 2, z: 0}
---- !u!65 &65570403983787284
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1847648006665092}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2.5, y: 1, z: 32}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65695945718258836
 BoxCollider:
   m_ObjectHideFlags: 1

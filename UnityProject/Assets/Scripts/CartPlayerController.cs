@@ -188,6 +188,11 @@ public class CartPlayerController : MonoBehaviour
         if (currentTrack.EndPos == transform.position)
         {
             localPlayer.SetGameStatus(newStatus);
+            if (newStatus == GameStatus.GameOver)
+            {
+                GetComponent<Rigidbody>().isKinematic = false;
+                GetComponent<Rigidbody>().useGravity = true;
+            }
         }
     }
 
@@ -229,11 +234,14 @@ public class CartPlayerController : MonoBehaviour
             {
                 localPlayer.SetGameStatus(GameStatus.GameOver);
                 GetComponent<Rigidbody>().useGravity = true;
+                GetComponent<Rigidbody>().isKinematic = false;
             }
         }else if(other.gameObject.tag == "Dangerous"){
             if (realSpeed > topSpeed / 2)
             {
                 localPlayer.SetGameStatus(GameStatus.GameOver);
+                GetComponent<Rigidbody>().useGravity = true;
+                GetComponent<Rigidbody>().isKinematic = false;
             }
         }
          
