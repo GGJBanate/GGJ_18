@@ -77,6 +77,14 @@ public class GameServer : NetworkBehaviour
         if (receiver == null) return;
         receiver.RpcReceiveMessage(message);
     }
+
+    public void SetGameStatus(GameStatus newStatus)
+    {
+        this.gameStatus = newStatus;
+
+        cartPlayer.RpcNotifyGameStateChange(newStatus);
+        controlRoomPlayer.RpcNotifyGameStateChange(newStatus);
+    }
 }
 
 public enum GameStatus {
