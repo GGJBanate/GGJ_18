@@ -97,7 +97,7 @@ public class TrackServer : NetworkBehaviour
                 break;
 
             case TrackType.Crossing: //TODO change to another visualization
-                GenerateTrackStepStraight(TrackType.Danger, pC, oC, generatedTrack, broken, depth);
+                GenerateTrackStepStraight(TrackType.Crossing, pC, oC, generatedTrack, broken, depth);
                 break;
 
             case TrackType.TwoWayJunction:
@@ -182,7 +182,7 @@ public class TrackServer : NetworkBehaviour
     }
 
     private TrackType RandomTrackType(int type = -1) {
-        switch(type < 0 ? Random.Range(0, 10) : type) {
+        switch(type < 0 ? Random.Range(0, 11) : type) {
             case 0:
             case 1:
             case 2:
@@ -202,6 +202,9 @@ public class TrackServer : NetworkBehaviour
 
             case 9:
                 return TrackType.Danger;
+                
+            case 10:
+                return TrackType.Crossing;
 
             default:
                 return TrackType.Straight;
