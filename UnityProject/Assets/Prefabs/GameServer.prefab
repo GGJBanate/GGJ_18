@@ -85,7 +85,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ae04e6115d30f94da07e18bfd915899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isHostCartOverride: 0
+  isHostCartOverride: 1
   gameStatus: 3
   crossesAreOpen: 0
 --- !u!114 &114831844546648666
