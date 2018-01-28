@@ -69,6 +69,7 @@ public class GameServer : NetworkBehaviour
     public void SendChatMessage(string message, LocalPlayerNetworkConnection sender)
     {
         LocalPlayerNetworkConnection receiver = sender == cartPlayer ? controlRoomPlayer : cartPlayer;
+        if (receiver == null) return;
         receiver.RpcReceiveMessage(message);
     }
 }
