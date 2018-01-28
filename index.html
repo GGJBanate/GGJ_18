@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Lost Miner</title>
+        <link href="https://fonts.googleapis.com/css?family=Passion+One" rel="stylesheet">
+        <style>
+            body, html {
+                background: rgba(200,200,200,1);
+                margin: 0;
+                padding: 0;
+                border: 0;
+            }
+            body {
+                display: grid;
+                grid-template-columns: 1fr minmax(50em, 80em) 1fr;
+            }
+            section {
+                grid-column: 2 / 2;
+            }
+            h1 {
+                grid-column: 1 / -1;
+                text-align: center;
+            }
+            .game {
+            }
+            .game img {
+                width: 100%;
+            }
+            .gametext {
+                width: 50%;
+                display: block;
+                margin: 25%;
+                margin-top: 1em;
+                margin-bottom: 0;
+            }
+            .team, .special {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-gap: 1em;
+                padding: 1em; 
+            }
+            .team article,
+            .special article {
+                border-radius: .5em;
+                background: white;
+                padding: 1em;
+                min-height: 10em;
+            }
+            .quote {
+                padding-left: 1em;
+                color: rgba(150,150,150,1);
+            }
+            .quote:before {
+                content: '"';
+                font-size: 3em;
+                font-weight: 1em;
+                font-family: 'Passion One', cursive;
+            }
+            .quote_small {
+                padding-left: 3em;
+                color: rgba(150,150,150,1);
+            }
+            .quote_small:before {
+                content: '"';
+                font-size: 2.5em;
+                font-weight: .8em;
+                font-family: 'Passion One', cursive;
+            }
+            .whatHaveIdone {
+                text-align: center;
+                padding-left: 2em;
+            }
+        </style>
+    </head>
+    <body>
+        <section class="game">
+            <img src="./LostMiner.jpg">
+
+            <span class="gametext">
+                Player 1 rides a cart through a mine, unable to take any control of it. But they can describe their situation to Player 2 who can switch tracks or clear out the way to get Player 1 out safe.
+            </span>
+        </section>
+        <section class="team">
+            <h1>Team</h1>
+            <article>
+                <h1>Jeffrey Bissel</h1>
+                <span class="quote">Hab ich irgentwas gecodet was dumm war?</span>
+                <br/>
+                <span class="quote_small">JaAa - Luca</span>
+                <br/>
+                <span class="whatHaveIdone">Control Room Design, Control Room Actions, Website</span>
+            </article>
+            <article>
+                <h1>Johannes Ganser</h1>
+                <span class="quote">Hätten wir Haskell benutzt wäre das alles viel besser.</span>
+                <br/>
+                <span class="quote_small">Nein - Alle</span>
+                <br/>
+                <span class="whatHaveIdone">Hindernisse, Level Design</span>
+            </article>
+            <article>
+                <h1>Fenja Kollasch</h1>
+                <span class="quote">9 von 10 Software-Engeneers haben sich gerade übergeben.</span>
+                <br/>
+                <span class="whatHaveIdone">Messenger, 3D Anpassung, GUI, Plakat</span>
+            </article>
+            <article>
+                <h1>Luca Nixdorf</h1>
+                <span class="quote">Halb gecrashed is' Schlaganfall.</span>
+                <br/>
+                <span class="whatHaveIdone">Network Connection, Map Generation, Cart Player Handling</span>
+            </article>
+        </section>
+        <section class="special">
+            <article>
+                <h1>Special Guest: Alica Henze</h1>
+                <span class="quote">Gebt mir den Glitzerkleber und ich regel das.</span>
+            </article>
+            <article>
+                <h1>Sonsored by</h1>
+                <h2 style="padding-left: 2em;"><a href="bissel-art.de">Bissel-Art.de</a></h2>
+            </article>
+            <article>
+                <h1>Special thanks to MakerBot</h1>
+                for Crossing Guard Model <br/>
+                Published on June 14, 2016<br/>
+                www.thingiverse.com/thing:220617<br/>
+            </article>
+        </section>
+    </body>
+</html>
