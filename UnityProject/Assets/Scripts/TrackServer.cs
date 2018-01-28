@@ -62,6 +62,7 @@ public class TrackServer : NetworkBehaviour
 
         TrackPieceData tpd = map[pos];
         tpd.id = map.Count;
+        tpd.brokenPath = broken;
 
         parent.track.Add(generatedTrack);
 

@@ -7,10 +7,15 @@ public class ControlRoomController : MonoBehaviour
     public TrackData track;
     public Dictionary<Pos, TrackPieceData> map;
 
+    private TrackMapDisplay mapScreen;
+
     public void Init()
     {
-    	TrackMapDisplay mapScreen = GameObject.Find("MapScreen").GetComponent<TrackMapDisplay>();
-
+    	mapScreen = GameObject.Find("MapScreen").GetComponent<TrackMapDisplay>();
     	mapScreen.init(map);
+    }
+
+    void Update () {
+        mapScreen.map = this.map;
     }
 }
