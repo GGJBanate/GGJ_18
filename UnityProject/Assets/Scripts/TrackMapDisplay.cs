@@ -14,6 +14,7 @@ public class TrackMapDisplay : MonoBehaviour {
     public Sprite hexagonFinish;
     public Sprite hexagonDeadEnd;
     public Sprite hexagonStart;
+    public Sprite hexagonBarrier;
 
     private Vector3 offset;
 
@@ -23,6 +24,14 @@ public class TrackMapDisplay : MonoBehaviour {
 
     public Dictionary<Pos, TrackPieceData> map;
 
+    private bool barriersAreOpen;
+
+    public Color colorStart         = new Color(1f, 0f, 0f, 1f);
+    public Color colorBarrierClosed = new Color(0.5f, 0f, 0f, 1f);
+    public Color colorBarrierOpend  = new Color(0f, 0.8f, 0f, 1f);
+    public Color colorOther         = new Color(0f, 0f, 0f, 1f);
+
+
     // Use this for initialization
     void Start () {
 
@@ -30,12 +39,11 @@ public class TrackMapDisplay : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        /*
+        barriersAreOpen = GameServer.Instance.crossesAreOpen;
         foreach(KeyValuePair<Pos, TrackPieceData> entry in map)
         {
             UpdatePiece(entry.Key, entry.Value);
         }
-        */
     }
 
     public void init(Dictionary<Pos, TrackPieceData> map) {
@@ -92,19 +100,31 @@ public class TrackMapDisplay : MonoBehaviour {
                 s = hexagonStart;
                 break;
 
+            case TrackType.Crossing: 
+                s = hexagonBarrier;
+                break;
+
             default:
                 s = hexagon;
                 break;
         }
 
         for(int z = 0; z < 2; ++z)
-            AddImage(pos, trackPiece.o, s, z, trackPiece.type == TrackType.Start );
+            AddImage(pos, trackPiece.o, s, z, trackPiece.type );
     }
 
-    private void AddImage(Pos p, Orientation o, Sprite s, int z = 0, bool highlight = false)
+    private void AddImage(Pos p, Orientation o, Sprite s, int z = 0, TrackType type = TrackType.Straight)
     {
-        GameObject go = new GameObject(GetPieceName(p), typeof(RectTransform));
-        Color c = new Color(highlight ? 1f - z*0.5f : 0f, 0f, 0f, 1 - z*0.5f);
+        GameObject go = new GameObject(GetPieceName(p, z), typeof(RectTransform));
+        Color c;
+        if(type == TrackType.Start) 
+            c = colorStart;
+        else if(type == TrackType.Crossing)
+            c = colorBarrierClosed;
+        else
+            c = colorOther;
+
+        c.a*= 2f*z;  
 
         var imageComp = go.AddComponent<Image>();
         imageComp.sprite = s;
@@ -123,13 +143,20 @@ public class TrackMapDisplay : MonoBehaviour {
 
     private void UpdatePiece(Pos pos, TrackPieceData trackPiece)
     {
-        var img = GameObject.Find(GetPieceName(pos)).GetComponent<Image>();
-        Color c = new Color(!trackPiece.brokenPath ? 1f : 0f, 0f, 0f, 1f);
-        img.color = c;
+        if(trackPiece.type != TrackType.Crossing)
+            return;
+
+        Color c;
+        for(int z = 0; z < 2; ++z) {
+            var img = GameObject.Find(GetPieceName(pos, z)).GetComponent<Image>();
+            c = barriersAreOpen ? colorBarrierOpend : colorBarrierClosed;
+            c.a*= 2f*z;  
+            img.color = c;
+        }
     }
 
-    private string GetPieceName(Pos p)
+    private string GetPieceName(Pos p, int z)
     {
-        return "TrackPiece_" + p.x + "_" + p.y;
+        return "TrackPiece_" + p.x + "_" + p.y + "_" + z;
     }
 }
