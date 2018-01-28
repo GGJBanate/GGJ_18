@@ -734,8 +734,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.0525435, y: 1.5305809, z: 1.1281179}
-  m_Center: {x: -0.013205544, y: 0.30745637, z: -0.008674297}
+  m_Size: {x: 1.0525435, y: 3.94, z: 0.82}
+  m_Center: {x: -0.013205544, y: 1.4, z: -0.008674297}
 --- !u!65 &65470700789342304
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -944,15 +944,13 @@ MonoBehaviour:
   LeverForward: {fileID: 1369013402270596}
   breaksEffect: {fileID: 198821006473922654}
   breakPowerBar: {fileID: 114217105377598798}
-  WaitingMessage: {fileID: 0}
   intro: {fileID: 1932894821466686, guid: 54821b8acdcd24b47ad33a1e849344da, type: 2}
-  ReadyMessage: {fileID: 0}
   maximumBreakPower: 100
   breakPowerBurnRate: 60
-  breakPowerRegenRate: 10
-  topSpeed: 5
-  minSpeed: 0.5
-  acceleration: 1
+  breakPowerRegenRate: 20
+  topSpeed: 7
+  minSpeed: 0.7
+  acceleration: 0.4
   deceleration: 2
   currentTrack: {fileID: 0}
 --- !u!114 &114217105377598798

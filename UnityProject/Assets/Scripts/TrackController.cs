@@ -13,8 +13,6 @@ public class TrackController : MonoBehaviour
     [HideInInspector]
     public TrackData track;
 
-    public bool debug = false;
-
     public static TrackController Instance { get; private set; }
 
     public CartPlayerController playerPrefab;
