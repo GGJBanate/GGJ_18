@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -7,18 +6,19 @@ using UnityEngine.Networking;
 
 public class LocalPlayerNetworkConnection : NetworkBehaviour
 {
-    public TrackController trackControllerPrefab;
+    private bool barrierSettingBlocked;
+    private ControlRoomController controlRoomControllerInstance;
     public ControlRoomController controlRoomControllerPrefab;
-
-    public GameObject winScreen;
     public GameObject gameOverScreen;
-
-    [SyncVar] public bool isCartPlayer;
 
     [SyncVar] public bool hasStarted;
 
+    [SyncVar] public bool isCartPlayer;
+
     private TrackController trackControllerInstance;
-    private ControlRoomController controlRoomControllerInstance;
+    public TrackController trackControllerPrefab;
+
+    public GameObject winScreen;
 
     public override void OnStartLocalPlayer()
     {
@@ -100,11 +100,9 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
     [Command]
     public void CmdStartGame()
     {
-        this.hasStarted = true;
+        hasStarted = true;
         GameServer.Instance.RefreshWaiting();
     }
-
-    private bool barrierSettingBlocked;
 
     public void ResetBarrier()
     {

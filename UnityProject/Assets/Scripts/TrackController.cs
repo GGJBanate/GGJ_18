@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Object = UnityEngine.Object;
-using Random = UnityEngine.Random;
 
 public class TrackController : MonoBehaviour
 {
-    public List<TrackPiece> trackPiecePrefabs;
+    public CartPlayerController playerPrefab;
 
-    [HideInInspector]
-    public TrackData track;
+    [HideInInspector] public TrackData track;
+
+    public List<TrackPiece> trackPiecePrefabs;
 
     public static TrackController Instance { get; private set; }
 
-    public CartPlayerController playerPrefab;
-
-    void Awake()
+    private void Awake()
     {
         Instance = this;
     }
@@ -55,30 +50,24 @@ public class TrackController : MonoBehaviour
         }
         else
         {
-            foreach (TrackData child in trackPiece.track)
-            {
-                SetSwitchState(child, trackPieceId, switchDirection);
-            }
+            foreach (TrackData child in trackPiece.track) SetSwitchState(child, trackPieceId, switchDirection);
         }
 
         var trackPieces = FindObjectsOfType<TrackPiece>();
 
         foreach (TrackPiece piece in trackPieces)
-        {
             if (piece.pieceData.data.id == trackPieceId)
             {
                 var target = piece.pieceData.track[switchDirection].data.id;
 
                 foreach (TrackPiece p in trackPieces)
-                {
                     if (p.pieceData.data.id == target)
                     {
                         p.entryCollider.active = true;
                         break;
                     }
-                }
+
                 break;
             }
-        }
     }
 }

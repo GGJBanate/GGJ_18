@@ -1,24 +1,22 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
 using UnityEngine.Networking;
 
 public class GameServer : NetworkBehaviour
 {
-    public bool DebugMode;
-
-    public bool isHostCartOverride = true;
-
-    [SyncVar] public GameStatus gameStatus = GameStatus.Waiting;
-
-    //TODO write SETTER for it LUCA pls!!!
-    [SyncVar] public bool crossesAreOpen = false;
-
-    public static GameServer Instance { get; private set; }
+    private LocalPlayerNetworkConnection cartPlayer;
 
 
     private LocalPlayerNetworkConnection controlRoomPlayer;
-    private LocalPlayerNetworkConnection cartPlayer;
+
+    //TODO write SETTER for it LUCA pls!!!
+    [SyncVar] public bool crossesAreOpen = false;
+    public bool DebugMode;
+
+    [SyncVar] public GameStatus gameStatus = GameStatus.Waiting;
+
+    public bool isHostCartOverride = true;
+
+    public static GameServer Instance { get; private set; }
 
     public void Awake()
     {
@@ -77,7 +75,7 @@ public class GameServer : NetworkBehaviour
 
     public void SetGameStatus(GameStatus newStatus)
     {
-        this.gameStatus = newStatus;
+        gameStatus = newStatus;
 
         if (cartPlayer != null)
             cartPlayer.RpcNotifyGameStateChange(newStatus);

@@ -1,10 +1,9 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 public static class Extensions
 {
-    private static Random rng = new Random();
+    private static readonly Random rng = new Random();
 
     public static void Shuffle<T>(this IList<T> list)
     {

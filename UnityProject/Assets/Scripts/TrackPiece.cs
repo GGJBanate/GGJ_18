@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -11,15 +10,19 @@ public class TrackPiece : MonoBehaviour
     public static float deadEndPieceLength = 0; //16;
     public Transform barrier;
 
-    private float getPieceLength()
-    {
-        switch (type)
-        {
-            case TrackType.Broken: return brokenPieceLength;
-            case TrackType.DeadEnd: return deadEndPieceLength;
-            default: return pieceLength;
-        }
-    }
+    public TrackEntryCollider entryCollider;
+
+    public List<GameObject> nextPiecePositions;
+
+    [HideInInspector] public List<TrackPiece> nextPieces = new List<TrackPiece>();
+
+    private bool nextPiecesSpawned;
+
+    [HideInInspector] public TrackData pieceData;
+
+    public Transform spawnPos;
+
+    public TrackType type = TrackType.Straight;
 
     public Vector3 EndPos
     {
@@ -30,19 +33,15 @@ public class TrackPiece : MonoBehaviour
         }
     }
 
-    public List<GameObject> nextPiecePositions;
-
-    [HideInInspector] public List<TrackPiece> nextPieces = new List<TrackPiece>();
-
-    [HideInInspector] public TrackData pieceData;
-
-    public TrackType type = TrackType.Straight;
-
-    public Transform spawnPos;
-
-    private bool nextPiecesSpawned;
-
-    public TrackEntryCollider entryCollider;
+    private float getPieceLength()
+    {
+        switch (type)
+        {
+            case TrackType.Broken: return brokenPieceLength;
+            case TrackType.DeadEnd: return deadEndPieceLength;
+            default: return pieceLength;
+        }
+    }
 
     public void OnDrawGizmos()
     {
@@ -53,7 +52,7 @@ public class TrackPiece : MonoBehaviour
             Vector3 tmp = TrackController.Instance.transform.forward;
             Vector3 dir = new Vector3(tmp.x, tmp.y, tmp.z);
 
-            Quaternion rot = Quaternion.AngleAxis(((int) pieceData.o) * 60, Vector3.up);
+            Quaternion rot = Quaternion.AngleAxis((int) pieceData.o * 60, Vector3.up);
 
             DrawArrow.ForGizmo(EndPos, rot * dir);
         }
@@ -104,7 +103,7 @@ public class TrackPiece : MonoBehaviour
         nextPiecesSpawned = true;
     }
 
-    void Update()
+    private void Update()
     {
         if (type != TrackType.Crossing)
             return;
@@ -112,14 +111,10 @@ public class TrackPiece : MonoBehaviour
         GameServer gs = GameServer.Instance;
         float speed = 0.1F;
         if (gs.crossesAreOpen)
-        {
             barrier.localRotation =
                 Quaternion.Lerp(barrier.localRotation, Quaternion.Euler(0, 0, 90), Time.time * speed);
-        }
         else
-        {
             barrier.localRotation =
                 Quaternion.Lerp(barrier.localRotation, Quaternion.Euler(0, 0, 0), Time.time * speed);
-        }
     }
 }
