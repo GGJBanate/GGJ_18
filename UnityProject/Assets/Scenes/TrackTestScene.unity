@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: NaN, g: NaN, b: NaN, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311947, g: 0.38074005, b: 0.35872722, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -152,11 +152,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 8
       objectReference: {fileID: 0}
-    - target: {fileID: 114948041712736282, guid: 92d1cf58bece29947ae7eae8a5815308,
-        type: 2}
-      propertyPath: activityIndicator
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 92d1cf58bece29947ae7eae8a5815308, type: 2}
   m_IsPrefabParent: 0
@@ -199,15 +194,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
-    - target: {fileID: 114838371832401718, guid: 742fa54c4219808499ecac2b13cf831a,
-        type: 2}
-      propertyPath: activityIndicator
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 742fa54c4219808499ecac2b13cf831a, type: 2}
   m_IsPrefabParent: 0
---- !u!1001 &404974297
+--- !u!1001 &546353700
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -481,7 +471,8 @@ Prefab:
       propertyPath: activityIndicator
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 65628198319568504, guid: d051d151702323b41a5e665d503b8842, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: d051d151702323b41a5e665d503b8842, type: 2}
   m_IsPrefabParent: 0
 --- !u!1001 &1295886820
@@ -522,11 +513,6 @@ Prefab:
     - target: {fileID: 4486707634132740, guid: f751826672f1ef24297d9b2a676be3ac, type: 2}
       propertyPath: m_RootOrder
       value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 114506077098382122, guid: f751826672f1ef24297d9b2a676be3ac,
-        type: 2}
-      propertyPath: activityIndicator
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f751826672f1ef24297d9b2a676be3ac, type: 2}
@@ -569,11 +555,6 @@ Prefab:
     - target: {fileID: 4330156847829576, guid: 2645c5143ece143b3a6a4d570c748ad7, type: 2}
       propertyPath: m_RootOrder
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114801530424027740, guid: 2645c5143ece143b3a6a4d570c748ad7,
-        type: 2}
-      propertyPath: activityIndicator
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2645c5143ece143b3a6a4d570c748ad7, type: 2}

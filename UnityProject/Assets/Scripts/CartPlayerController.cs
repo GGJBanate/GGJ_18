@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
@@ -7,61 +6,61 @@ using UnityEngine.UI;
 
 public class CartPlayerController : MonoBehaviour
 {
-    public GameObject lamp;
-    public Camera playerCamera;
+    public float acceleration = 3;
 
-    public GameObject LeverLeft;
-    public GameObject LeverRight;
-    public GameObject LeverForward;
-
-    public ParticleSystem breaksEffect;
+    private bool breaking;
 
     public Image breakPowerBar;
-
-	public GameObject intro;
-	private Text introText;
-	private Text pressEnter;
-	private Text waitingMessage;
-	private Text readyMessage;
-
-    public float maximumBreakPower = 100;
 
     public float breakPowerBurnRate = 30;
     public float breakPowerRegenRate = 10;
 
-    public float topSpeed = 10;
-    public float minSpeed = 3;
-    public float acceleration = 3;
-    public float deceleration = 6;
-
-    private float currentVelocity = 0;
+    public ParticleSystem breaksEffect;
 
     private float currentBreakPower;
 
-    private bool breaking = false;
-
     [HideInInspector] public TrackPiece currentTrack;
+
+    private float currentVelocity;
+    public float deceleration = 6;
+
+    public GameObject intro;
+    private Text introText;
+    public GameObject lamp;
+    public GameObject LeverForward;
+
+    public GameObject LeverLeft;
+    public GameObject LeverRight;
 
     private LocalPlayerNetworkConnection localPlayer;
 
+    public float maximumBreakPower = 100;
+    public float minSpeed = 3;
+    public Camera playerCamera;
+    private Text pressEnter;
+    private Text readyMessage;
+
     private bool started;
 
-    void Start()
+    public float topSpeed = 10;
+    private Text waitingMessage;
+
+    private void Start()
     {
         localPlayer = FindObjectsOfType<LocalPlayerNetworkConnection>().First(l => l.isLocalPlayer);
         currentBreakPower = maximumBreakPower;
-		intro = Instantiate (intro);
-		intro.transform.SetAsLastSibling ();
+        intro = Instantiate(intro);
+        intro.transform.SetAsLastSibling();
 
-		Text[] introTexts = intro.GetComponentsInChildren<Text> ();
-		introText = introTexts[0];
-		pressEnter = introTexts [1];
-		waitingMessage = introTexts [2];
-		readyMessage = introTexts [3];
-		readyMessage.gameObject.SetActive (false);
+        Text[] introTexts = intro.GetComponentsInChildren<Text>();
+        introText = introTexts[0];
+        pressEnter = introTexts[1];
+        waitingMessage = introTexts[2];
+        readyMessage = introTexts[3];
+        readyMessage.gameObject.SetActive(false);
     }
 
-    IEnumerator Shake()
+    private IEnumerator Shake()
     {
         while (gameObject)
         {
@@ -71,25 +70,29 @@ public class CartPlayerController : MonoBehaviour
         }
     }
 
-    void Update()
+    private void Update()
     {
         if (GameServer.Instance.gameStatus != GameStatus.Ongoing)
         {
-			if (Input.GetButtonDown ("Submit")) {
-				LocalPlayerNetworkConnection connectionObj = FindObjectsOfType<LocalPlayerNetworkConnection>().First(l => l.isLocalPlayer);
-				connectionObj.StartGame ();
-				readyMessage.gameObject.SetActive(true);
-				introText.gameObject.SetActive (false);
-				pressEnter.gameObject.SetActive (false);
-			}
-			waitingMessage.gameObject.SetActive(true);
-				
+            if (Input.GetButtonDown("Submit"))
+            {
+                LocalPlayerNetworkConnection connectionObj =
+                    FindObjectsOfType<LocalPlayerNetworkConnection>().First(l => l.isLocalPlayer);
+                connectionObj.StartGame();
+                readyMessage.gameObject.SetActive(true);
+                introText.gameObject.SetActive(false);
+                pressEnter.gameObject.SetActive(false);
+            }
+
+            waitingMessage.gameObject.SetActive(true);
+
             return;
         }
-        else if (!started)
+
+        if (!started)
         {
-			waitingMessage.gameObject.SetActive(false);
-			intro.SetActive (false);
+            waitingMessage.gameObject.SetActive(false);
+            intro.SetActive(false);
             StartCoroutine(Shake());
             started = true;
         }
@@ -97,9 +100,7 @@ public class CartPlayerController : MonoBehaviour
         if (Input.GetButtonDown("Break"))
         {
             if (breaksEffect != null && !breaksEffect.isPlaying)
-            {
                 breaksEffect.Play(true);
-            }
 
             breaking = true;
         }
@@ -114,9 +115,7 @@ public class CartPlayerController : MonoBehaviour
                 currentBreakPower += Time.deltaTime * breakPowerRegenRate;
 
             if (breaksEffect != null && breaksEffect.isPlaying)
-            {
                 breaksEffect.Stop(true);
-            }
 
             breaking = false;
         }
@@ -167,10 +166,8 @@ public class CartPlayerController : MonoBehaviour
     {
         GameServer gameServer = GameServer.Instance;
         if (gameServer.gameStatus != GameStatus.Ongoing)
-        {
             //Nowhere to move now...
             return;
-        }
 
         currentVelocity += (breaking ? -deceleration : acceleration) * Time.deltaTime;
         currentVelocity = Mathf.Clamp(currentVelocity, 0, 1);
@@ -188,6 +185,8 @@ public class CartPlayerController : MonoBehaviour
         if (currentTrack.EndPos == transform.position)
         {
             localPlayer.SetGameStatus(newStatus);
+            if (newStatus == GameStatus.GameOver)
+                DropPlayer();
         }
     }
 
@@ -222,20 +221,31 @@ public class CartPlayerController : MonoBehaviour
     {
         var realSpeed = (topSpeed - minSpeed) * currentVelocity + minSpeed;
 
-        if(other.gameObject.tag == "BarrierArm"){
+        if (other.gameObject.tag == "BarrierArm")
+        {
             localPlayer.SetGameStatus(GameStatus.GameOver);
-        }else if(other.gameObject.tag == "Hole"){
+        }
+        else if (other.gameObject.tag == "Hole")
+        {
             if (realSpeed < topSpeed / 2)
             {
                 localPlayer.SetGameStatus(GameStatus.GameOver);
-                GetComponent<Rigidbody>().useGravity = true;
+                DropPlayer();
             }
-        }else if(other.gameObject.tag == "Dangerous"){
+        }
+        else if (other.gameObject.tag == "Dangerous")
+        {
             if (realSpeed > topSpeed / 2)
             {
                 localPlayer.SetGameStatus(GameStatus.GameOver);
+                DropPlayer();
             }
         }
-         
+    }
+
+    private void DropPlayer()
+    {
+        GetComponent<Rigidbody>().useGravity = true;
+        GetComponent<Rigidbody>().isKinematic = false;
     }
 }

@@ -1,21 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TrackEntryCollider : MonoBehaviour
 {
-    [HideInInspector] public TrackPiece track;
-
     [HideInInspector] private bool _active;
 
     public GameObject activityIndicator;
+    [HideInInspector] public TrackPiece track;
 
     public bool active
     {
-        get
-        {
-            return _active;
-        }
+        get { return _active; }
 
         set
         {
@@ -24,12 +18,12 @@ public class TrackEntryCollider : MonoBehaviour
         }
     }
 
-    void Start()
+    private void Start()
     {
         if (activityIndicator != null) activityIndicator.SetActive(GameServer.Instance.DebugMode);
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.tag != "Player") return;
 
@@ -38,12 +32,8 @@ public class TrackEntryCollider : MonoBehaviour
         if (active)
         {
             Destroy(player.currentTrack.gameObject, 1);
-            player.currentTrack = this.track;
+            player.currentTrack = track;
             track.SpawnNextPieces();
-        }
-        else
-        {
-           // Destroy(track.gameObject, 3); // TODO What
         }
     }
 }

@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
-using UnityEngine;
 
 public class TrackData
 {
+    public TrackPieceData data;
     public List<TrackData> track = new List<TrackData>();
+
+    public TrackData(Orientation o)
+    {
+        data = new TrackPieceData();
+        data.o = o;
+    }
 
     public TrackType type
     {
@@ -20,14 +22,6 @@ public class TrackData
     {
         get { return data.o; }
         set { data.o = value; }
-    }
-
-    public TrackPieceData data;
-
-    public TrackData(Orientation o)
-    {
-        data = new TrackPieceData();
-        data.o = o;
     }
 
     public string SerializeForNetwork()

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -7,15 +6,19 @@ using UnityEngine.Networking;
 
 public class LocalPlayerNetworkConnection : NetworkBehaviour
 {
-    public TrackController trackControllerPrefab;
+    private bool barrierSettingBlocked;
+    private ControlRoomController controlRoomControllerInstance;
     public ControlRoomController controlRoomControllerPrefab;
-
-    [SyncVar] public bool isCartPlayer;
+    public GameObject gameOverScreen;
 
     [SyncVar] public bool hasStarted;
 
+    [SyncVar] public bool isCartPlayer;
+
     private TrackController trackControllerInstance;
-    private ControlRoomController controlRoomControllerInstance;
+    public TrackController trackControllerPrefab;
+
+    public GameObject winScreen;
 
     public override void OnStartLocalPlayer()
     {
@@ -75,9 +78,7 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
     public void SendChatMessage(string msg)
     {
         if (isLocalPlayer)
-        {
             CmdSendMessage(msg);
-        }
     }
 
     public void SetGameStatus(GameStatus newStatus)
@@ -88,7 +89,7 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
     [Command]
     public void CmdSetGameStatus(GameStatus newStatus)
     {
-        GameServer.Instance.gameStatus = newStatus;
+        GameServer.Instance.SetGameStatus(newStatus);
     }
 
     public void StartGame()
@@ -99,11 +100,9 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
     [Command]
     public void CmdStartGame()
     {
-        this.hasStarted = true;
+        hasStarted = true;
         GameServer.Instance.RefreshWaiting();
     }
-
-    private bool barrierSettingBlocked;
 
     public void ResetBarrier()
     {
@@ -127,5 +126,15 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
     public void CmdSetBarrier()
     {
         GameServer.Instance.crossesAreOpen = !GameServer.Instance.crossesAreOpen;
+    }
+
+    [ClientRpc]
+    public void RpcNotifyGameStateChange(GameStatus state)
+    {
+        if (isLocalPlayer)
+        {
+            winScreen.SetActive(state == GameStatus.Won);
+            gameOverScreen.SetActive(state == GameStatus.GameOver);
+        }
     }
 }

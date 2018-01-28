@@ -1,31 +1,25 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
 using Newtonsoft.Json;
-using UnityEngine;
 using UnityEngine.Networking;
-using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 public class TrackServer : NetworkBehaviour
 {
-    public int trackLength = 10;
+    public float deadEndBreakageLengthFactorMax = .7f;
 
     public float deadEndBreakageLengthFactorMin = .3f;
-    public float deadEndBreakageLengthFactorMax = .7f;
 
     public Dictionary<Pos, TrackPieceData> map = new Dictionary<Pos, TrackPieceData>(new Pos.EqualityComparer());
 
-    public static TrackServer Instance { get; private set; }
+    [SyncVar] public string serializedMap;
 
     [SyncVar] public string serializedTrack;
 
-    [SyncVar] public string serializedMap;
-
     private TrackData track;
+    public int trackLength = 10;
+
+    public static TrackServer Instance { get; private set; }
 
     public void Awake()
     {
@@ -42,20 +36,20 @@ public class TrackServer : NetworkBehaviour
     private TrackData GenerateTrack(int depth)
     {
         TrackData generatedTrack = new TrackData(Orientation.NN);
-        
-        generatedTrack.type = TrackType.Start;
-        
-        map.Add(new Pos(), new TrackPieceData(generatedTrack.o, generatedTrack.type));
-        map.Add(new Pos(0,-1), new TrackPieceData(Orientation.NN));
 
-        this.GenerateTrackStep(depth, new Pos(0,-1), Orientation.NN, false, generatedTrack);
-        
+        generatedTrack.type = TrackType.Start;
+
+        map.Add(new Pos(), new TrackPieceData(generatedTrack.o, generatedTrack.type));
+        map.Add(new Pos(0, -1), new TrackPieceData(Orientation.NN));
+
+        GenerateTrackStep(depth, new Pos(0, -1), Orientation.NN, false, generatedTrack);
+
         generatedTrack.track[0].data.switchActive = true;
         generatedTrack.data.activeChild = 0;
 
         return generatedTrack;
     }
-    
+
     private void GenerateTrackStep(int depth, Pos pos, Orientation o, bool broken, TrackData parent)
     {
         TrackData generatedTrack = new TrackData(o);
@@ -66,13 +60,15 @@ public class TrackServer : NetworkBehaviour
 
         parent.track.Add(generatedTrack);
 
-        if (depth >= (broken ? trackLength * Random.Range(deadEndBreakageLengthFactorMin, deadEndBreakageLengthFactorMax) : trackLength) )
+        if (depth >= (broken
+                ? trackLength * Random.Range(deadEndBreakageLengthFactorMin, deadEndBreakageLengthFactorMax)
+                : trackLength))
         {
             generatedTrack.type = broken ? TrackType.DeadEnd : TrackType.Finish;
             tpd.type = generatedTrack.type;
             map[pos] = tpd;
             return;
-        } 
+        }
 
         Pos pL = pos.Go(o, -1);
         Pos pC = pos.Go(o, 0);
@@ -108,7 +104,8 @@ public class TrackServer : NetworkBehaviour
                 map.Add(pL, new TrackPieceData(oL));
                 map.Add(pR, new TrackPieceData(oR));
 
-                switch (Random.Range(0, 2)) {
+                switch (Random.Range(0, 2))
+                {
                     case 0:
                         GenerateTrackStep(depth + 1, pL, oL, broken, generatedTrack);
                         GenerateTrackStep(depth + 1, pR, oR, true, generatedTrack);
@@ -134,7 +131,8 @@ public class TrackServer : NetworkBehaviour
                 map.Add(pC, new TrackPieceData(oC));
                 map.Add(pR, new TrackPieceData(oR));
 
-                switch (Random.Range(0, 3)) {
+                switch (Random.Range(0, 3))
+                {
                     case 0:
                         GenerateTrackStep(depth + 1, pL, oL, broken, generatedTrack);
                         GenerateTrackStep(depth + 1, pC, oC, true, generatedTrack);
@@ -164,25 +162,28 @@ public class TrackServer : NetworkBehaviour
         map[pos] = tpd;
     }
 
-    private void GenerateTrackStepStraight(TrackType type, Pos p, Orientation o, TrackData generatedTrack, bool broken, int depth) {
-                if (map.ContainsKey(p))
-                {
-                    generatedTrack.type = broken ? TrackType.DeadEnd : TrackType.Finish;
-                    return;
-                }
+    private void GenerateTrackStepStraight(TrackType type, Pos p, Orientation o, TrackData generatedTrack, bool broken,
+        int depth)
+    {
+        if (map.ContainsKey(p))
+        {
+            generatedTrack.type = broken ? TrackType.DeadEnd : TrackType.Finish;
+            return;
+        }
 
-                generatedTrack.type = type;
-                map.Add(p, new TrackPieceData(o));
+        generatedTrack.type = type;
+        map.Add(p, new TrackPieceData(o));
 
-                GenerateTrackStep(depth + 1, p, o, broken, generatedTrack);
+        GenerateTrackStep(depth + 1, p, o, broken, generatedTrack);
 
-                generatedTrack.track[0].data.switchActive = true;
-                generatedTrack.data.activeChild = 0;
-                return;
+        generatedTrack.track[0].data.switchActive = true;
+        generatedTrack.data.activeChild = 0;
     }
 
-    private TrackType RandomTrackType(int type = -1) {
-        switch(type < 0 ? Random.Range(0, 11) : type) {
+    private TrackType RandomTrackType(int type = -1)
+    {
+        switch (type < 0 ? Random.Range(0, 11) : type)
+        {
             case 0:
             case 1:
             case 2:
@@ -202,7 +203,7 @@ public class TrackServer : NetworkBehaviour
 
             case 9:
                 return TrackType.Danger;
-                
+
             case 10:
                 return TrackType.Crossing;
 
@@ -226,10 +227,10 @@ public struct TrackPieceData
     public TrackPieceData(Orientation o, TrackType t = TrackType.Straight)
     {
         this.o = o;
-        this.type = t;
-        this.switchActive = false;
-        this.activeChild = 0;
-        this.id = 0;
-        this.brokenPath = false;
+        type = t;
+        switchActive = false;
+        activeChild = 0;
+        id = 0;
+        brokenPath = false;
     }
 }
