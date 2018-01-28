@@ -97,9 +97,7 @@ public class CartPlayerController : MonoBehaviour
         if (Input.GetButtonDown("Break"))
         {
             if (breaksEffect != null && !breaksEffect.isPlaying)
-            {
                 breaksEffect.Play(true);
-            }
 
             breaking = true;
         }
@@ -114,9 +112,7 @@ public class CartPlayerController : MonoBehaviour
                 currentBreakPower += Time.deltaTime * breakPowerRegenRate;
 
             if (breaksEffect != null && breaksEffect.isPlaying)
-            {
                 breaksEffect.Stop(true);
-            }
 
             breaking = false;
         }
@@ -167,10 +163,8 @@ public class CartPlayerController : MonoBehaviour
     {
         GameServer gameServer = GameServer.Instance;
         if (gameServer.gameStatus != GameStatus.Ongoing)
-        {
             //Nowhere to move now...
             return;
-        }
 
         currentVelocity += (breaking ? -deceleration : acceleration) * Time.deltaTime;
         currentVelocity = Mathf.Clamp(currentVelocity, 0, 1);
@@ -189,10 +183,7 @@ public class CartPlayerController : MonoBehaviour
         {
             localPlayer.SetGameStatus(newStatus);
             if (newStatus == GameStatus.GameOver)
-            {
-                GetComponent<Rigidbody>().isKinematic = false;
-                GetComponent<Rigidbody>().useGravity = true;
-            }
+                DropPlayer();
         }
     }
 
@@ -233,17 +224,21 @@ public class CartPlayerController : MonoBehaviour
             if (realSpeed < topSpeed / 2)
             {
                 localPlayer.SetGameStatus(GameStatus.GameOver);
-                GetComponent<Rigidbody>().useGravity = true;
-                GetComponent<Rigidbody>().isKinematic = false;
+                DropPlayer();
             }
         }else if(other.gameObject.tag == "Dangerous"){
             if (realSpeed > topSpeed / 2)
             {
                 localPlayer.SetGameStatus(GameStatus.GameOver);
-                GetComponent<Rigidbody>().useGravity = true;
-                GetComponent<Rigidbody>().isKinematic = false;
+                DropPlayer();
             }
         }
          
+    }
+
+    private void DropPlayer()
+    {
+        GetComponent<Rigidbody>().useGravity = true;
+        GetComponent<Rigidbody>().isKinematic = false;
     }
 }

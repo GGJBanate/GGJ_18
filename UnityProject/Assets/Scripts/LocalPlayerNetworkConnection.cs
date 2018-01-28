@@ -78,9 +78,7 @@ public class LocalPlayerNetworkConnection : NetworkBehaviour
     public void SendChatMessage(string msg)
     {
         if (isLocalPlayer)
-        {
             CmdSendMessage(msg);
-        }
     }
 
     public void SetGameStatus(GameStatus newStatus)

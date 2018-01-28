@@ -63,13 +63,9 @@ public class GameServer : NetworkBehaviour
     public void RefreshWaiting()
     {
         if (DebugMode || controlRoomPlayer && cartPlayer && controlRoomPlayer.hasStarted && cartPlayer.hasStarted)
-        {
             gameStatus = GameStatus.Ongoing;
-        }
         else
-        {
             gameStatus = GameStatus.Waiting;
-        }
     }
 
     public void SendChatMessage(string message, LocalPlayerNetworkConnection sender)

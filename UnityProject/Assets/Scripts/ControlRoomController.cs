@@ -57,13 +57,10 @@ public class ControlRoomController : MonoBehaviour
 			intro.SetActive (false);
 			started = true;
 		}
-	    if (GameServer.Instance.gameStatus == GameStatus.Ongoing)
-        {
-            if (Input.GetButtonDown("BarrierSwitch"))
-            {
-                localPlayer.SetBarrier();
-            }
-		}
-		mapScreen.map = this.map;
+
+	    if (GameServer.Instance.gameStatus == GameStatus.Ongoing && Input.GetButtonDown("BarrierSwitch"))
+	        localPlayer.SetBarrier();
+
+	    mapScreen.map = this.map;
 	}
 }

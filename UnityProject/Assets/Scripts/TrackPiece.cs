@@ -8,11 +8,13 @@ public class TrackPiece : MonoBehaviour
     public static float pieceLength = 32;
     public static float pieceHeight = 1;
     public static float brokenPieceLength = 35;
-    public static float deadEndPieceLength = 0;//16;
+    public static float deadEndPieceLength = 0; //16;
     public Transform barrier;
 
-    private float getPieceLength(){
-        switch(type){
+    private float getPieceLength()
+    {
+        switch (type)
+        {
             case TrackType.Broken: return brokenPieceLength;
             case TrackType.DeadEnd: return deadEndPieceLength;
             default: return pieceLength;
@@ -30,8 +32,7 @@ public class TrackPiece : MonoBehaviour
 
     public List<GameObject> nextPiecePositions;
 
-    [HideInInspector]
-    public List<TrackPiece> nextPieces = new List<TrackPiece>();
+    [HideInInspector] public List<TrackPiece> nextPieces = new List<TrackPiece>();
 
     [HideInInspector] public TrackData pieceData;
 
@@ -103,16 +104,22 @@ public class TrackPiece : MonoBehaviour
         nextPiecesSpawned = true;
     }
 
-    void Update(){
-        if(type != TrackType.Crossing){
+    void Update()
+    {
+        if (type != TrackType.Crossing)
             return;
-        }
+
         GameServer gs = GameServer.Instance;
         float speed = 0.1F;
-        if(gs.crossesAreOpen){            
-            barrier.localRotation = Quaternion.Lerp(barrier.localRotation, Quaternion.Euler(0,0,90), Time.time * speed);
-        }else{
-            barrier.localRotation = Quaternion.Lerp(barrier.localRotation, Quaternion.Euler(0,0,0), Time.time * speed);
+        if (gs.crossesAreOpen)
+        {
+            barrier.localRotation =
+                Quaternion.Lerp(barrier.localRotation, Quaternion.Euler(0, 0, 90), Time.time * speed);
+        }
+        else
+        {
+            barrier.localRotation =
+                Quaternion.Lerp(barrier.localRotation, Quaternion.Euler(0, 0, 0), Time.time * speed);
         }
     }
 }
