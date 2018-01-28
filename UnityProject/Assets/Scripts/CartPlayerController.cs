@@ -231,4 +231,11 @@ public class CartPlayerController : MonoBehaviour
             piece.entryCollider.active = index == switchDirection;
         }
     }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "BarrierArm"){
+            localPlayer.SetGameStatus(GameStatus.GameOver);
+        }
+    }
 }
