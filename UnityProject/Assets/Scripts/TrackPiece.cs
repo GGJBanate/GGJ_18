@@ -110,9 +110,9 @@ public class TrackPiece : MonoBehaviour
         GameServer gs = GameServer.Instance;
         float speed = 0.1F;
         if(gs.crossesAreOpen){            
-            barrier.rotation = Quaternion.Lerp(barrier.rotation, new Quaternion(0,0,90), Time.time * speed);
+            barrier.rotation = Quaternion.Lerp(barrier.rotation, Quaternion.Euler(0,0,90), Time.time * speed);
         }else{
-            barrier.rotation = Quaternion.Lerp(barrier.rotation, new Quaternion(0,0,0), Time.time * speed);
+            barrier.rotation = Quaternion.Lerp(barrier.rotation, Quaternion.Euler(0,0,0), Time.time * speed);
         }
     }
 }
