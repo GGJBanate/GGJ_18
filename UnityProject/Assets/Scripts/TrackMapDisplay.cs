@@ -17,7 +17,11 @@ public class TrackMapDisplay : MonoBehaviour {
 
     private Vector3 offset;
 
+    const float PER_TILE_OFFSET_X = 0.14f;
+
     public static readonly Vector3 SCALE = new Vector3(1, 0.866f, 1);
+
+    public Dictionary<Pos, TrackPieceData> map;
 
     // Use this for initialization
     void Start () {
@@ -26,10 +30,15 @@ public class TrackMapDisplay : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        
+        Debug.Log("Update MapDisplay");
+        foreach(KeyValuePair<Pos, TrackPieceData> entry in map)
+        {
+            UpdatePiece(entry.Key, entry.Value);
+        }
     }
 
     public void init(Dictionary<Pos, TrackPieceData> map) {
+        this.map = map;
 
         int top = 0, right = 0, bottom = 0, left = 0;
 
@@ -47,58 +56,82 @@ public class TrackMapDisplay : MonoBehaviour {
 
         foreach(KeyValuePair<Pos, TrackPieceData> entry in map)
         {
-            AddTextToCanvas("TrackPiece_" +entry.Key.x+ "_"+entry.Key.y, entry.Key, entry.Value);
+            AddTextToCanvas(entry.Key, entry.Value);
         }
-
-
-        Debug.Log("bounderies: " + top + " " + right + " " + bottom + " " + left + "||" + offset.x + " " + offset.y );
     }
 
-    public void AddTextToCanvas(string text, Pos pos, TrackPieceData trackPiece)
+    public void AddTextToCanvas(Pos pos, TrackPieceData trackPiece)
     {
-        GameObject newText = new GameObject(text.Replace(" ", "-"), typeof(RectTransform));
-
-        var newImageComp = newText.AddComponent<Image>();
+        Sprite s;
 
         switch(trackPiece.type) {
             case TrackType.Broken:
             case TrackType.Danger:
             case TrackType.Straight: 
-                newImageComp.sprite = hexagonStraight;
+                s = hexagonStraight;
                 break;
 
             case TrackType.TwoWayJunction: 
-                newImageComp.sprite = hexagonTwoWayJunction;
+                s = hexagonTwoWayJunction;
                 break;
 
             case TrackType.ThreeWayJunction: 
-                newImageComp.sprite = hexagonThreeWayJunction;
+                s = hexagonThreeWayJunction;
                 break;
 
             case TrackType.Finish: 
-                newImageComp.sprite = hexagonFinish;
+                s = hexagonFinish;
                 break;
 
             case TrackType.DeadEnd: 
-                newImageComp.sprite = hexagonDeadEnd;
+                s = hexagonDeadEnd;
                 break;
 
             case TrackType.Start: 
-                newImageComp.sprite = hexagonStart;
+                s = hexagonStart;
                 break;
 
             default:
-                newImageComp.sprite = hexagon;
+                s = hexagon;
                 break;
         }
 
-        newText.transform.SetParent(canvas.transform);
-        newText.transform.localScale = SCALE;
-        newText.transform.localPosition = new Vector3(
-            offset.x + pos.x - 0.14f*pos.x, 
-            offset.y - (pos.y - ( (pos.x+100) % 2 == 0 ? -0.5f : 0)), 
-            0
+        for(int z = 0; z < 2; ++z)
+            AddImage(pos, trackPiece.o, s, z, ! trackPiece.brokenPath);
+    }
+
+    private void AddImage(Pos p, Orientation o, Sprite s, int z = 0, bool highlight = false)
+    {
+        GameObject go = new GameObject(GetPieceName(p), typeof(RectTransform));
+        Color c = new Color(highlight ? 1f - z*0.5f : 0f, 0f, 0f, 1 - z*0.5f);
+
+        var imageComp = go.AddComponent<Image>();
+        // var spriteRenderer = go.AddComponent<SpriteRenderer>();
+        imageComp.sprite = s;
+        imageComp.color = c;
+        // spriteRenderer.sprite = s;
+        // spriteRenderer.color = c;
+
+        go.transform.SetParent(canvas.transform);
+        go.transform.localScale = SCALE;
+        go.transform.localPosition = new Vector3 (
+            offset.x + p.x - PER_TILE_OFFSET_X * p.x, 
+            offset.y - (p.y - ((p.x + 100) % 2 == 0 ? -0.5f : 0) ), 
+            z * 0.03f
         ) * 100;
-        newText.transform.Rotate(Vector3.forward, ((int)trackPiece.o) * -60);
+        go.transform.localRotation = Quaternion.identity;
+        go.transform.Rotate(Vector3.forward, ((int) o) * -60);
+    }
+
+    private void UpdatePiece(Pos pos, TrackPieceData trackPiece)
+    {
+        var img = GameObject.Find(GetPieceName(pos)).GetComponent<Image>();
+        Color c = new Color(!trackPiece.brokenPath ? 1f : 0f, 0f, 0f, 1f);
+        img.color = c;
+    }
+
+    private string GetPieceName(Pos p)
+    {
+        return "TrackPiece_" + p.x + "_" + p.y;
     }
 }

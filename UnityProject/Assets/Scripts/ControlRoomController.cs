@@ -9,6 +9,7 @@ public class ControlRoomController : MonoBehaviour
     public TrackData track;
     public Dictionary<Pos, TrackPieceData> map;
 
+
 	public GameObject intro;
 	private Text introText;
 	private Text pressEnter;
@@ -16,14 +17,13 @@ public class ControlRoomController : MonoBehaviour
 	private Text readyMessage;
 
 	private bool started;
+    private TrackMapDisplay mapScreen;
 
     public void Init()
     {
-    	TrackMapDisplay mapScreen = GameObject.Find("MapScreen").GetComponent<TrackMapDisplay>();
-
+    	mapScreen = GameObject.Find("MapScreen").GetComponent<TrackMapDisplay>();
     	mapScreen.init(map);
     }
-
 	public void Start() {
 		intro = Instantiate (intro);
 		intro.transform.SetAsLastSibling ();
@@ -53,5 +53,6 @@ public class ControlRoomController : MonoBehaviour
 			intro.SetActive (false);
 			started = true;
 		}
+		mapScreen.map = this.map;
 	}
 }
