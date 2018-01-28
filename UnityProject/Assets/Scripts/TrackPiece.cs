@@ -7,12 +7,23 @@ public class TrackPiece : MonoBehaviour
 {
     public static float pieceLength = 32;
     public static float pieceHeight = 1;
+    public static float brokenPieceLength = 35;
+    public static float deadEndPieceLength = 0;//16;
+    public Transform barrier;
+
+    private float getPieceLength(){
+        switch(type){
+            case TrackType.Broken: return brokenPieceLength;
+            case TrackType.DeadEnd: return deadEndPieceLength;
+            default: return pieceLength;
+        }
+    }
 
     public Vector3 EndPos
     {
         get
         {
-            var pos = new Vector3(0, pieceHeight / 2, pieceLength / 2);
+            var pos = new Vector3(0, pieceHeight / 2, getPieceLength() / 2);
             return transform.TransformPoint(pos);
         }
     }
@@ -97,8 +108,11 @@ public class TrackPiece : MonoBehaviour
             return;
         }
         GameServer gs = GameServer.Instance;
-        if(gs.crossesAreOpen){
-            ;//Change the mesh of the crossing at the track to Open
+        float speed = 0.1F;
+        if(gs.crossesAreOpen){            
+            barrier.rotation = Quaternion.Lerp(barrier.rotation, new Quaternion(0,0,90), Time.time * speed);
+        }else{
+            barrier.rotation = Quaternion.Lerp(barrier.rotation, new Quaternion(0,0,0), Time.time * speed);
         }
     }
 }
