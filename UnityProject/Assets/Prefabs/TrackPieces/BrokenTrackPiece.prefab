@@ -70,9 +70,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4815946081841882}
   - component: {fileID: 95366707400747130}
+  - component: {fileID: 65097390901455848}
   m_Layer: 0
   m_Name: BROKEN_RAIL
-  m_TagString: Untagged
+  m_TagString: Hole
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -442,6 +443,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1275226607150612}
   m_Mesh: {fileID: 4300000, guid: 4e62704e668c2444fa3681efa9545f97, type: 3}
+--- !u!65 &65097390901455848
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1283457108778146}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 40, y: 50, z: 20}
+  m_Center: {x: 0, y: 20, z: -85}
 --- !u!65 &65124386939059060
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -535,6 +548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 997ed7e7107540b478f083230c257a14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  barrier: {fileID: 0}
   nextPiecePositions:
   - {fileID: 1966057766247246}
   nextPieces: []

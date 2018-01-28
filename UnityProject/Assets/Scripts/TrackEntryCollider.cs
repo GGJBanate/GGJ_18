@@ -19,14 +19,14 @@ public class TrackEntryCollider : MonoBehaviour
 
         set
         {
-            if (activityIndicator != null) activityIndicator.SetActive(value && TrackController.Instance.debug);
+            if (activityIndicator != null) activityIndicator.SetActive(value && GameServer.Instance.DebugMode);
             _active = value;
         }
     }
 
     void Start()
     {
-        if (activityIndicator != null) activityIndicator.SetActive(TrackController.Instance.debug);
+        if (activityIndicator != null) activityIndicator.SetActive(GameServer.Instance.DebugMode);
     }
 
     void OnTriggerEnter(Collider other)

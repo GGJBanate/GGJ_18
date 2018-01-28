@@ -1124,6 +1124,7 @@ MonoBehaviour:
   hexagonFinish: {fileID: 21300000, guid: 09f73a60d27d9415aa30a0f6d87275f1, type: 3}
   hexagonDeadEnd: {fileID: 21300000, guid: cf7b718be85e2474eaaa0f622818d915, type: 3}
   hexagonStart: {fileID: 21300000, guid: c7ec40d4b98c7462f8df2ebf95a78093, type: 3}
+  hexagonBarrier: {fileID: 21300000, guid: 833f84e6d512746abaac291b24358594, type: 3}
 --- !u!114 &114744633876616516
 MonoBehaviour:
   m_ObjectHideFlags: 1

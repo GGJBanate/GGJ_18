@@ -73,7 +73,7 @@ public class CartPlayerController : MonoBehaviour
 
     void Update()
     {
-        if (GameServer.Instance.gameStatus == GameStatus.Waiting)
+        if (GameServer.Instance.gameStatus != GameStatus.Ongoing)
         {
 			if (Input.GetButtonDown ("Submit")) {
 				LocalPlayerNetworkConnection connectionObj = FindObjectsOfType<LocalPlayerNetworkConnection>().First(l => l.isLocalPlayer);
@@ -180,7 +180,7 @@ public class CartPlayerController : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, currentTrack.transform.rotation, 0.1f);
 
         //Check and Change GameStatus
-        UpdateGameStatus(realSpeed);
+        UpdateGameStatus();
     }
 
     private void ChangeStateAtEndTo(GameStatus newStatus)
@@ -188,32 +188,23 @@ public class CartPlayerController : MonoBehaviour
         if (currentTrack.EndPos == transform.position)
         {
             localPlayer.SetGameStatus(newStatus);
+            if (newStatus == GameStatus.GameOver)
+            {
+                GetComponent<Rigidbody>().isKinematic = false;
+                GetComponent<Rigidbody>().useGravity = true;
+            }
         }
     }
 
-    private void UpdateGameStatus(float realSpeed)
+    private void UpdateGameStatus()
     {
         switch (currentTrack.type)
         {
-            case TrackType.Broken:
-                if (realSpeed < topSpeed / 2)
-                {
-                    localPlayer.SetGameStatus(GameStatus.GameOver);
-                }
-
-                break;
             case TrackType.Finish:
                 ChangeStateAtEndTo(GameStatus.Won);
                 break;
             case TrackType.DeadEnd:
                 ChangeStateAtEndTo(GameStatus.GameOver);
-                break;
-            case TrackType.Danger:
-                if (realSpeed > topSpeed / 2)
-                {
-                    localPlayer.SetGameStatus(GameStatus.GameOver);
-                }
-
                 break;
             default: break;
         }
@@ -234,8 +225,25 @@ public class CartPlayerController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
+        var realSpeed = (topSpeed - minSpeed) * currentVelocity + minSpeed;
+
         if(other.gameObject.tag == "BarrierArm"){
             localPlayer.SetGameStatus(GameStatus.GameOver);
+        }else if(other.gameObject.tag == "Hole"){
+            if (realSpeed < topSpeed / 2)
+            {
+                localPlayer.SetGameStatus(GameStatus.GameOver);
+                GetComponent<Rigidbody>().useGravity = true;
+                GetComponent<Rigidbody>().isKinematic = false;
+            }
+        }else if(other.gameObject.tag == "Dangerous"){
+            if (realSpeed > topSpeed / 2)
+            {
+                localPlayer.SetGameStatus(GameStatus.GameOver);
+                GetComponent<Rigidbody>().useGravity = true;
+                GetComponent<Rigidbody>().isKinematic = false;
+            }
         }
+         
     }
 }

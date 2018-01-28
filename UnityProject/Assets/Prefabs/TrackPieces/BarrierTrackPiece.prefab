@@ -213,7 +213,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4353593273006732}
-  - component: {fileID: 65102484941054498}
   m_Layer: 0
   m_Name: railtrack
   m_TagString: Untagged
@@ -518,7 +517,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100006, guid: a87329bb042554f5aada6a48b3339231, type: 3}
+  - {fileID: 2100000, guid: 658efd500e0b35046acfa1c3701d859c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -607,18 +606,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1254588145351114}
   m_Mesh: {fileID: 4300000, guid: 2f4ab6d73b0f8a64b8a99f704a3486dc, type: 3}
---- !u!65 &65102484941054498
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1858428512613568}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2.5, y: 1, z: 32}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65588849537840938
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -641,7 +628,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.1, y: 1.2, z: 0.1}
+  m_Size: {x: 0.1, y: 1.2, z: 0.3}
   m_Center: {x: 0, y: 0.1, z: 0}
 --- !u!114 &114547300342544502
 MonoBehaviour:
