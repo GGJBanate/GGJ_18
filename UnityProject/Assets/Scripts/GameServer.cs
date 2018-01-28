@@ -85,7 +85,7 @@ public class GameServer : NetworkBehaviour
 
         if (cartPlayer != null)
             cartPlayer.RpcNotifyGameStateChange(newStatus);
-        if (cartPlayer != null)
+        if (controlRoomPlayer != null)
             controlRoomPlayer.RpcNotifyGameStateChange(newStatus);
     }
 }
