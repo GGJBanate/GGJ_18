@@ -85,7 +85,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ae04e6115d30f94da07e18bfd915899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isHostCartOverride: 1
+  isHostCartOverride: 0
+  gameStatus: 3
+  crossesAreOpen: 0
 --- !u!114 &114831844546648666
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -97,8 +99,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45ed2de566ddaed49ae534d30f5f968c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isHostCartOverride: 0
   trackLength: 10
-  deadEndBreakageProbability: 0.8
+  deadEndBreakageLengthFactorMin: 0.3
+  deadEndBreakageLengthFactorMax: 0.7
   serializedTrack: 
   serializedMap: 

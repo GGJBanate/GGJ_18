@@ -18,8 +18,11 @@ public class CartPlayerController : MonoBehaviour
 
     public Image breakPowerBar;
 
-    public GameObject WaitingMessage;
 	public GameObject intro;
+	private Text introText;
+	private Text pressEnter;
+	private Text waitingMessage;
+	private Text readyMessage;
 
     public float maximumBreakPower = 100;
 
@@ -35,8 +38,6 @@ public class CartPlayerController : MonoBehaviour
 
     private float currentBreakPower;
 
-	private bool ready = false;
-
     private bool breaking = false;
 
     [HideInInspector] public TrackPiece currentTrack;
@@ -50,7 +51,14 @@ public class CartPlayerController : MonoBehaviour
         localPlayer = FindObjectsOfType<LocalPlayerNetworkConnection>().First(l => l.isLocalPlayer);
         currentBreakPower = maximumBreakPower;
 		intro = Instantiate (intro);
+		intro.transform.SetAsLastSibling ();
 
+		Text[] introTexts = intro.GetComponentsInChildren<Text> ();
+		introText = introTexts[0];
+		pressEnter = introTexts [1];
+		waitingMessage = introTexts [2];
+		readyMessage = introTexts [3];
+		readyMessage.gameObject.SetActive (false);
     }
 
     IEnumerator Shake()
@@ -68,15 +76,20 @@ public class CartPlayerController : MonoBehaviour
         if (GameServer.Instance.gameStatus == GameStatus.Waiting)
         {
 			if (Input.GetButtonDown ("Submit")) {
-				intro.SetActive (false);
-				ready = true;
+				LocalPlayerNetworkConnection connectionObj = FindObjectsOfType<LocalPlayerNetworkConnection>().First(l => l.isLocalPlayer);
+				connectionObj.StartGame ();
+				readyMessage.gameObject.SetActive(true);
+				introText.gameObject.SetActive (false);
+				pressEnter.gameObject.SetActive (false);
 			}
-            WaitingMessage.SetActive(true);
+			waitingMessage.gameObject.SetActive(true);
+				
             return;
         }
-        else if (!started && ready)
+        else if (!started)
         {
-            WaitingMessage.SetActive(false);
+			waitingMessage.gameObject.SetActive(false);
+			intro.SetActive (false);
             StartCoroutine(Shake());
             started = true;
         }
