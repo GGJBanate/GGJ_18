@@ -73,7 +73,7 @@ public class CartPlayerController : MonoBehaviour
 
     void Update()
     {
-        if (GameServer.Instance.gameStatus == GameStatus.Waiting)
+        if (GameServer.Instance.gameStatus != GameStatus.Ongoing)
         {
 			if (Input.GetButtonDown ("Submit")) {
 				LocalPlayerNetworkConnection connectionObj = FindObjectsOfType<LocalPlayerNetworkConnection>().First(l => l.isLocalPlayer);
@@ -212,6 +212,7 @@ public class CartPlayerController : MonoBehaviour
                 if (realSpeed > topSpeed / 2)
                 {
                     localPlayer.SetGameStatus(GameStatus.GameOver);
+                    GetComponent<Rigidbody>().useGravity = true;
                 }
 
                 break;
