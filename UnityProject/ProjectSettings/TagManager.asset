@@ -8,6 +8,8 @@ TagManager:
   - ViewContent
   - Connection
   - BarrierArm
+  - Hole
+  - Dangerous
   layers:
   - Default
   - TransparentFX
